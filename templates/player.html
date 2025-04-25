@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>埋め込み動画プレーヤー</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .player-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        video {
+            width: 100%;
+            max-height: 70vh; /* Adjust height as needed */
+            background-color: #000;
+        }
+        .info-panel {
+            padding: 10px;
+            background-color: #f5f5f5;
+            flex-grow: 1;
+            overflow-y: auto;
+            color: #333; /* Text color for readability */
+            font-family: sans-serif; /* Basic font */
+            font-size: 14px; /* Adjust font size */
+        }
+        .scene-info {
+            display: flex;
+            margin-bottom: 10px;
+            align-items: center; /* Vertically align items */
+        }
+        .thumbnail {
+            width: 80px;
+            height: auto; /* Maintain aspect ratio */
+            margin-right: 10px;
+            border: 1px solid #ccc; /* Add a light border */
+            object-fit: cover; /* Ensure image covers the area */
+        }
+        .metadata {
+            flex-grow: 1;
+        }
+        .metadata p {
+            margin: 4px 0; /* Adjust spacing */
+            line-height: 1.4; /* Improve readability */
+        }
+        .metadata p strong {
+            display: inline-block;
+            min-width: 50px; /* Align labels */
+        }
+        #description {
+            white-space: pre-wrap; /* Preserve whitespace in description */
+        }
+        #placeholderImg {
+             width: 80px;
+             height: 45px; /* Match typical 16:9 aspect ratio for placeholder */
+             background-color: #eee;
+             border: 1px solid #ccc;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             color: #aaa;
+             font-size: 12px;
+             margin-right: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <video id="videoPlayer" controls autoplay>
+            <source src="" type="video/mp4">
+            お使いのブラウザは動画タグをサポートしていません。
+        </video>
+        <div class="info-panel">
+            <div class="scene-info">
+                <!-- Use a div for placeholder initially -->
+                <div id="placeholderImg">No Image</div>
+                <img id="thumbnailImg" class="thumbnail" src="" alt="シーンサムネイル" style="display: none;"> <!-- Hide initially -->
+                <div class="metadata">
+                    <p><strong>シーンID:</strong> <span id="sceneId">-</span></p>
+                    <p><strong>開始:</strong> <span id="startTime">-</span></p>
+                    <p><strong>終了:</strong> <span id="endTime">-</span></p>
+                    <p><strong>評価タグ:</strong> <span id="evalTag">-</span></p>
+                </div>
+            </div>
+            <p><strong>説明:</strong> <span id="description">-</span></p>
+        </div>
+    </div>
+
+    <script>
+        const videoPlayer = document.getElementById('videoPlayer');
+        const thumbnailImg = document.getElementById('thumbnailImg');
+        const placeholderImg = document.getElementById('placeholderImg');
+        const sceneIdSpan = document.getElementById('sceneId');
+        const startTimeSpan = document.getElementById('startTime');
+        const endTimeSpan = document.getElementById('endTime');
+        const evalTagSpan = document.getElementById('evalTag');
+        const descriptionSpan = document.getElementById('description');
+
+        // --- Security: Define allowed origins ---
+        // Replace with your actual Excel Online domain and local development domain
+        const allowedOrigins = [
+            // "https://your-excel-online-domain.com", // Example for production
+            // "https://localhost:3000", // Example for local Office Add-in development server
+            "http://localhost:5000" // Origin of the Flask app itself (if taskpane is served from there)
+            // Add other origins if necessary
+        ];
+
+        // メッセージ受信イベントを設定
+        window.addEventListener('message', function(event) {
+            // --- Origin Validation ---
+            if (!allowedOrigins.includes(event.origin) && event.origin !== window.origin) { // Allow messages from self
+                 console.warn(`Message received from disallowed origin: ${event.origin}. Allowed: ${allowedOrigins.join(', ')}`);
+                 // In production, you might want to uncomment the return statement:
+                 // return;
+            }
+
+            console.log("Message received in player:", event.data); // Debugging
+
+            const data = event.data;
+
+            // 動画再生リクエスト
+            if (data.type === 'playVideo') {
+                const videoUrl = data.videoUrl;
+                const startTime = data.startTime || 0; // seconds
+
+                if (videoUrl) {
+                    // Check if the source is already set to avoid unnecessary reloads
+                    // Note: Creating a full URL might be necessary if relative paths are used
+                    const currentSrc = videoPlayer.currentSrc || videoPlayer.querySelector('source')?.src;
+                    const newSrcAbsolute = new URL(videoUrl, window.location.origin).href;
+
+                    if (currentSrc !== newSrcAbsolute) {
+                        console.log("Setting video source to:", newSrcAbsolute);
+                        videoPlayer.src = newSrcAbsolute; // Use absolute URL
+                        videoPlayer.load(); // Important to load the new source
+                    } else {
+                         console.log("Video source already set.");
+                    }
+
+                    // Use 'canplay' event for seeking after load
+                    const seekAndPlay = () => {
+                        // Ensure video metadata is loaded before seeking
+                        if (videoPlayer.readyState >= videoPlayer.HAVE_METADATA) {
+                           if (startTime && Math.abs(videoPlayer.currentTime - startTime) > 0.1) { // Seek only if significantly different
+                               console.log("Seeking to:", startTime);
+                               videoPlayer.currentTime = startTime;
+                           }
+                           videoPlayer.play().catch(e => console.error("Play interrupted:", e));
+                        } else {
+                            console.warn("Video metadata not ready for seeking.");
+                        }
+                        // Remove the listener after execution
+                        videoPlayer.removeEventListener('canplay', seekAndPlay);
+                        videoPlayer.removeEventListener('loadedmetadata', seekAndPlay); // Also remove this one
+                    };
+
+                    // Add event listeners for seeking
+                    videoPlayer.addEventListener('canplay', seekAndPlay);
+                     // Fallback for browsers that might fire loadedmetadata sooner
+                    videoPlayer.addEventListener('loadedmetadata', seekAndPlay);
+
+
+                } else {
+                     console.error("playVideo message received without videoUrl");
+                }
+
+                // シーン情報があれば表示
+                if (data.sceneInfo) {
+                    updateSceneInfo(data.sceneInfo);
+                } else {
+                    // Clear info if no scene info is provided with the video
+                    clearSceneInfo();
+                }
+            }
+        });
+
+        // シーン情報を更新
+        function updateSceneInfo(info) {
+            console.log("Updating scene info:", info); // Debugging
+            sceneIdSpan.textContent = info.sceneId || '-';
+            startTimeSpan.textContent = info.startTimecode || '-';
+            endTimeSpan.textContent = info.endTimecode || '-';
+            evalTagSpan.textContent = info.evaluationTag || '-';
+            descriptionSpan.textContent = info.description || '-';
+
+            if (info.thumbnailUrl) {
+                const thumbnailUrlAbsolute = new URL(info.thumbnailUrl, window.location.origin).href;
+                thumbnailImg.src = thumbnailUrlAbsolute;
+                thumbnailImg.style.display = 'block'; // Show image
+                placeholderImg.style.display = 'none'; // Hide placeholder
+                thumbnailImg.onerror = () => { // Handle image loading errors
+                    console.error("Failed to load thumbnail:", thumbnailUrlAbsolute);
+                    thumbnailImg.style.display = 'none';
+                    placeholderImg.style.display = 'flex'; // Show placeholder again
+                };
+            } else {
+                 clearThumbnail();
+            }
+        }
+
+         // Clear scene info display
+        function clearSceneInfo() {
+            sceneIdSpan.textContent = '-';
+            startTimeSpan.textContent = '-';
+            endTimeSpan.textContent = '-';
+            evalTagSpan.textContent = '-';
+            descriptionSpan.textContent = '-';
+            clearThumbnail();
+        }
+
+         // Clear thumbnail display and show placeholder
+        function clearThumbnail() {
+            thumbnailImg.src = '';
+            thumbnailImg.style.display = 'none'; // Hide image
+            placeholderImg.style.display = 'flex'; // Show placeholder
+        }
+
+
+        // エラーハンドリング
+        videoPlayer.addEventListener('error', (e) => {
+            console.error('Video Error:', e);
+            // Optionally display an error message to the user in the info panel
+            descriptionSpan.textContent = `ビデオの読み込みに失敗しました: ${videoPlayer.error?.message || '不明なエラー'}`;
+        });
+
+        // 親ウィンドウに準備完了を通知 (DOM完全にロード後)
+        window.addEventListener('DOMContentLoaded', () => {
+             console.log("Player DOMContentLoaded, sending playerReady to parent");
+             // Use '*' for flexibility during development, but restrict in production
+             window.parent.postMessage({ type: 'playerReady' }, '*');
+        });
+
+    </script>
+</body>
+</html> 

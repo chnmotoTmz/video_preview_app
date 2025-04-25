@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SQLite連携動画ビューアー シーン選別・エクスポート</title>
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-jp@4.5.11/index.min.css" rel="stylesheet">
+  <!-- Chart.js (for future extension) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { font-family: 'Noto Sans JP', sans-serif; }
+    /* thin vertical scrollbar for data tables */
+    .table-scroll::-webkit-scrollbar {
+      width: 6px;
+      background: #ddd;
+    }
+    .table-scroll::-webkit-scrollbar-thumb {
+      background: #bbb;
+      border-radius: 8px;
+    }
+    .disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <header class="bg-green-700 text-white shadow py-4 px-6 flex justify-between items-center">
+    <h1 class="text-xl font-bold flex items-center">
+      <i class="fas fa-video mr-2"></i>
+      SQLite連携動画ビューアー
+    </h1>
+    <span class="text-sm hidden sm:inline">シーン選別・EDL/SRTエクスポート</span>
+  </header>
+  <main class="max-w-7xl mx-auto p-4">
+    <section class="mb-4">
+      <div class="flex flex-col sm:flex-row items-center gap-3">
+        <label for="videoSelect" class="font-medium">動画ファイル選択：</label>
+        <select id="videoSelect" class="w-72 p-2 border rounded shadow-sm focus:ring-green-500 focus:border-green-500">
+          <option value="">--- 動画を選択してください ---</option>
+        </select>
+        <button id="reloadBtn" class="ml-0 sm:ml-4 px-3 py-2 bg-gray-200 rounded hover:bg-gray-300 text-gray-800 text-sm flex items-center">
+          <i class="fas fa-sync-alt mr-1"></i>リロード
+        </button>
+        <!-- プレビューウィンドウを開くボタンを追加 -->
+        <button id="openPreviewBtn" class="ml-0 sm:ml-4 px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm flex items-center disabled" disabled>
+          <i class="fas fa-external-link-alt mr-1"></i>プレビューを開く
+        </button>
+      </div>
+    </section>
+
+    <!-- Video Player と Thumbnail Section を削除 -->
+    <!-- Layout Toggle Button も削除 -->
+
+    <!-- Scene Table Section -->
+    <!-- テーブルセクションのマージンや幅を調整 (必要に応じて) -->
+    <section class="mb-4 bg-white rounded shadow p-4">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="font-medium text-lg"><i class="fas fa-list mr-2"></i>シーン一覧</h2>
+        <div>
+          <label class="inline-flex items-center font-normal text-sm mr-3">
+            <input type="checkbox" id="selectAllScenes" class="form-checkbox h-4 w-4 text-green-600">
+            <span class="ml-2">全選択</span>
+          </label>
+          <select id="sceneTagFilter" class="border p-1 rounded text-xs py-0.5">
+            <option value="">評価タグ フィルタ</option>
+            <option value="Emotional">Emotional</option>
+            <option value="Descriptive">Descriptive</option>
+            <option value="Generic">Generic</option>
+          </select>
+          <!-- EDLエクスポートボタンをシーンテーブルセクションに移動 -->
+          <button id="exportEDLBtn" class="ml-2 px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-xs disabled" disabled>
+            <i class="fas fa-file-export mr-1"></i>EDL出力
+          </button>
+        </div>
+      </div>
+      <!-- table id と class を DataTables 用に変更 -->
+      <table id="scenes-table" class="display compact cell-border" style="width:100%; font-size: 0.8rem;">
+          <thead class="bg-gray-200">
+            <tr>
+              <!-- 列定義は app.js 側で管理するためシンプルに -->
+              <th><input type="checkbox" id="select-all-checkbox"></th> <!-- 全選択チェックボックス -->
+              <th>サムネイル</th>
+              <th>Scene#</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Description</th>
+              <th>Tag</th>
+              <th>Good Rsn</th>
+              <th>Bad Rsn</th>
+              <th>アクション</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- DataTablesが内容を注入 -->
+          </tbody>
+        </table>
+        <!-- 選択統計表示 -->
+        <div class="mt-2 text-sm text-gray-700">
+          選択: <span id="selected-count">0 / 0</span> シーン / 合計時間: <span id="selected-duration">00:00:00</span>
+        </div>
+    </section>
+
+    <!-- Transcription Table Section -->
+    <section class="bg-white rounded shadow p-4">
+      <details open class="mb-2">
+        <summary class="font-medium text-lg"><i class="fas fa-closed-captioning mr-2"></i>字幕・発話テキスト一覧</summary>
+        
+        <!-- Controls Row -->
+        <div class="flex flex-wrap items-center justify-between mb-2 px-1 py-1 space-x-2 border-b">
+            <div>
+                <label for="quality-filter" class="sr-only">品質でフィルタ</label>
+                <select id="quality-filter" class="form-select form-select-sm rounded border-gray-300 shadow-sm" style="height: 2rem; padding-right: 1.5rem;">
+                    <option value="">品質フィルタ...</option>
+                    <!-- Options managed by JS or DataTables search -->
+                </select>
+            </div>
+            <div class="flex-grow"></div> <!-- Spacer -->
+            <div>
+                 <!-- SRTエクスポートボタンのIDを修正 -->
+                 <button id="exportSRTBtn" class="btn btn-sm btn-outline-secondary border rounded px-2 py-1 text-xs disabled" disabled>
+                   <i class="fas fa-file-export mr-1"></i>SRTエクスポート
+                 </button>
+            </div>
+             <!-- DataTables search input will be placed by JS -->
+        </div>
+        <!-- End Controls Row -->
+        
+        <div class="overflow-x-auto table-scroll max-h-80"> <!-- 高さを少し増やす -->
+          <table id="transcriptions-table" class="display compact cell-border" style="width:100%; font-size: 0.8rem;"> 
+            <thead class="bg-gray-200">
+              <tr>
+                <th>開始</th>
+                <th>終了</th>
+                <th>字幕・発話</th>
+                <th>シーンID</th>
+                <th>良い理由</th>
+                <th>悪い理由</th>
+                 <th>アクション</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- transcription injected by DataTables -->
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+  </main>
+  <footer class="text-center text-xs text-gray-400 py-3 bg-gray-200">© 2024 O-YAMA-GOPRO Viewer. Powered by Flask/SQLite/JS.</footer>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <!-- Your custom JS -->
+  <script src="/js/app.js"></script> 
+  
+  <!-- <script> ... old inline script removed ... </script> -->
+</body>
+</html> 

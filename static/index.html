@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLite連携 動画ビューアー</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="header-main">
+                <h1>SQLite連携 動画ビューアー</h1>
+                <div class="controls">
+                    <select id="video-selector" class="excel-like-select">
+                        <option value="">動画を選択...</option>
+                    </select>
+                    <button id="open-player" class="excel-button player-button">
+                        <i class="fas fa-play-circle"></i> プレーヤーを開く
+                    </button>
+                </div>
+            </div>
+            <div class="excel-like-tabs">
+                <button class="tab-button active" data-tab="scenes">シーン</button>
+                <button class="tab-button" data-tab="transcriptions">字幕</button>
+            </div>
+        </header>
+        
+        <main>
+            <div class="excel-like-toolbar">
+                <div class="left-controls">
+                    <div class="filter-group">
+                        <select id="tag-filter" class="excel-like-select">
+                            <option value="">タグでフィルタ...</option>
+                            <option value="Generic">Generic</option>
+                            <option value="Emotional">Emotional</option>
+                            <option value="Descriptive">Descriptive</option>
+                        </select>
+                        <select id="quality-filter" class="excel-like-select">
+                            <option value="">品質でフィルタ...</option>
+                            <option value="Descriptive">Descriptive</option>
+                            <option value="Emotional">Emotional</option>
+                            <option value="Filler">Filler</option>
+                            <option value="Repetitive">Repetitive</option>
+                        </select>
+                        <button id="reset-filters" class="excel-button">
+                            <i class="fas fa-filter"></i> フィルタクリア
+                        </button>
+                    </div>
+                    <div class="selection-group">
+                        <button id="select-all-scenes-btn" class="excel-button">
+                            <i class="fas fa-check-square"></i> 全選択
+                        </button>
+                        <button id="deselect-all-scenes-btn" class="excel-button">
+                            <i class="fas fa-square"></i> 選択解除
+                        </button>
+                    </div>
+                </div>
+                <div class="right-controls">
+                    <button id="play-selected-scenes-btn" class="excel-button primary">
+                        <i class="fas fa-play"></i> 選択シーンを再生
+                    </button>
+                    <button id="export-edl-btn" class="excel-button">
+                        <i class="fas fa-file-export"></i> EDLエクスポート
+                    </button>
+                    <button id="export-srt-btn" class="excel-button">
+                        <i class="fas fa-closed-captioning"></i> SRTエクスポート
+                    </button>
+                </div>
+            </div>
+            
+            <div class="selection-stats">
+                <span>選択: <span id="selected-count-display">0 / 0</span> シーン / 合計時間: <span id="selected-duration-display">00:00:00:00</span></span>
+            </div>
+            
+            <div class="tab-content">
+                <div id="scenes-tab" class="tab-pane active">
+                    <div class="excel-like-table-container">
+                        <table id="scenes-table" class="excel-like-table display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="select-all-scenes-checkbox"></th>
+                                    <th>サムネイル</th>
+                                    <th>Scene#</th>
+                                    <th>ファイル名</th>
+                                    <th>開始</th>
+                                    <th>終了</th>
+                                    <th>長さ</th>
+                                    <th>説明</th>
+                                    <th>評価タグ</th>
+                                    <th>良い理由</th>
+                                    <th>悪い理由</th>
+                                    <th>アクション</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="transcriptions-tab" class="tab-pane">
+                    <div class="excel-like-table-container">
+                        <table id="transcriptions-table" class="excel-like-table display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Scene#</th>
+                                    <th>ファイル名</th>
+                                    <th>開始</th>
+                                    <th>終了</th>
+                                    <th>字幕テキスト</th>
+                                    <th>良い理由</th>
+                                    <th>悪い理由</th>
+                                    <th>アクション</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>SQLite連携 動画ビューアー © 2025</p>
+        </footer>
+    </div>
+    
+    <div id="video-player-popup" class="popup-window">
+        <div class="popup-header">
+            <h3>動画プレーヤー</h3>
+            <button id="close-player-btn" class="close-button"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="popup-content">
+            <div class="video-container">
+                <video id="popup-video-player" controls>
+                    <source src="" type="video/mp4">
+                    お使いのブラウザはビデオタグをサポートしていません。
+                </video>
+                <div id="popup-subtitle-container"></div>
+            </div>
+            <div class="scene-info">
+                <h3>シーン情報</h3>
+                <div id="current-scene-info">
+                    <div class="scene-thumbnail">
+                        <img id="popup-scene-thumbnail" src="placeholder.jpg" alt="シーンサムネイル">
+                    </div>
+                    <div class="scene-details">
+                        <p><strong>シーンID:</strong> <span id="popup-scene-id">-</span></p>
+                        <p><strong>開始:</strong> <span id="popup-scene-start">-</span></p>
+                        <p><strong>終了:</strong> <span id="popup-scene-end">-</span></p>
+                        <p><strong>評価タグ:</strong> <span id="popup-scene-tag">-</span></p>
+                    </div>
+                </div>
+                <div class="scene-description">
+                    <p><strong>説明:</strong></p>
+                    <p id="popup-scene-description">-</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="popup-overlay"></div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>

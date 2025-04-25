@@ -1,73 +1,103 @@
-# Video Scene Preview and Editor
+# 動画プレビューアプリ
 
-This Python application provides a user interface for browsing, previewing, editing, and managing video scenes stored in an SQLite database.
+動画、シーン、字幕データを統合的に管理・表示するWebアプリケーションです。
 
-## Features
+## 機能
 
--   **Database Integration:** Loads video and scene data from a pre-defined SQLite database (`video_data.db`).
--   **VLC Powered Playback:** Uses VLC (via `python-vlc`) for robust video playback, handling a wide range of codecs.
--   **Scene Table View:** Displays all scenes from the database in a sortable table with columns:
-    -   Select (Checkbox)
-    -   File (Video ID)
-    -   Scene (Scene ID)
-    -   Start (HH:MM:SS.mmm)
-    -   End (HH:MM:SS.mmm)
-    -   Description Length
-    -   Transcript Length
-    -   Scene Length (seconds)
--   **Numerical Sorting:** Allows sorting the table by Scene ID, Description Length, Transcript Length, and Scene Length numerically.
--   **Scene Preview:** Click any row in the table to:
-    -   Load the corresponding video file (requires selecting the correct Base Directory).
-    -   Play the specific scene segment (respecting start and end times).
-    -   Display scene description and transcript in the right panel.
--   **Sequential Playback:** Select multiple scenes using checkboxes and click "連続再生" (Sequential Play) to play them back-to-back. Playback starts from the currently selected row if it's checked, otherwise from the first checked scene.
--   **Scene Editing:** Edit the Description and Transcript text fields in the right panel and click "説明/文字起こしを保存" (Save Description/Transcript) to update the database. Table lengths are updated automatically.
--   **Scene Deletion:** Select scenes using checkboxes and click "選択したシーンを削除" (Delete Selected Scenes) to remove them from the database (confirmation required).
--   **Base Directory Selection:** Allows specifying the root directory where the source video files (`.MP4` etc.) are located.
+- 動画の一覧表示と選択
+- シーンと字幕の統合表示
+- フィルタリング機能
+  - シーン番号による絞り込み
+  - 説明文検索
+  - 字幕検索
+  - 評価タグによるフィルタリング
+- シーン再生機能
+- エクスポート機能（EDL、SRT形式）
 
-## Requirements
+## システム構成
 
--   Python 3
--   PyQt5
--   python-vlc
--   **VLC Media Player:** The VLC media player application must be installed on your system as `python-vlc` uses its libraries. Download from [VideoLAN](https://www.videolan.org/vlc/index.ja.html).
--   An SQLite database file named `video_data.db` in the same directory as the script, containing `videos` and `scenes` tables with the expected structure.
+- バックエンド: Flask (Python)
+- フロントエンド: Streamlit (Python)
+- データベース: SQLite
 
-## Installation
+## 必要条件
 
-1.  **Clone the repository or download the scripts** (`video_preview_app.py`, `video_player.py`, `database_manager.py`).
-2.  **Install VLC Media Player** if you haven't already.
-3.  **Install the required Python libraries:**
-    ```bash
-    pip install PyQt5 python-vlc
-    ```
-4.  **Prepare the database:** Ensure `video_data.db` exists in the same directory and contains the necessary video and scene data.
+- Python 3.8以上
+- 必要なPythonパッケージ:
+  - Flask
+  - Streamlit
+  - pandas
+  - requests
+  - streamlit-option-menu
 
-## Usage
+## インストール方法
 
-1.  **Run the application:**
-    ```bash
-    python video_preview_app.py
-    ```
-2.  **Select Base Directory:** Click the "ベースディレクトリ選択..." (Select Base Directory) button and choose the folder containing your source video files.
-3.  **Browse and Select Scenes:** Use the table on the left to view scenes.
-4.  **Preview:** Click a row to preview the scene.
-5.  **Edit:** Edit text in the right panel and click the save button.
-6.  **Delete:** Check scenes and click the delete button.
-7.  **Sequential Playback:** Check scenes, select a starting scene (optional), and click the sequential play button.
+1. リポジトリをクローン:
+```bash
+git clone [リポジトリURL]
+cd video_preview_app
+```
 
-## Code Overview
+2. 必要なパッケージをインストール:
+```bash
+pip install -r requirements.txt
+```
 
--   **`video_preview_app.py`:** The main application window (`VideoPreviewApp`). Handles UI layout, database interaction orchestration, table population, scene selection logic, sequential playback control, and connects different components.
-    -   `SceneInfoPanel`: The right-side panel displaying and editing scene details.
-    -   `NumericTableWidgetItem`: Custom table item for correct numerical sorting.
--   **`video_player.py`:** The video player widget (`VideoPlayer`) using `python-vlc` for playback and controls. Handles playing specific segments and emitting signals on playback completion.
--   **`database_manager.py`:** The `DatabaseManager` class handles all interactions with the SQLite database (connecting, fetching data, updating, deleting).
+## 使用方法
 
-## Known Issues / Potential Improvements
+1. バックエンドサーバー（Flask）を起動:
+```bash
+python app.py --base-folder [動画ファイルのベースフォルダパス] --port 5000
+```
 
--   VLC integration can sometimes be sensitive to environment setup (VLC installation path, 32/64-bit mismatch).
--   File ID sorting in the table might not be purely numerical due to alphanumeric prefixes.
--   Search functionality is currently disabled and needs updating for the table view.
--   No thumbnail display in the table.
--   Error handling could be more robust in some areas. # video_preview_app
+2. フロントエンド（Streamlit）を起動:
+```bash
+streamlit run streamlit_app.py
+```
+
+3. ブラウザで `http://localhost:8501` にアクセス
+
+## データベース構造
+
+- `videos`: 動画情報
+- `scenes`: シーン情報
+- `transcriptions`: 字幕情報
+
+## APIエンドポイント
+
+- `GET /api/videos`: 動画一覧を取得
+- `GET /api/combined_data/{video_id}`: 動画、シーン、字幕の統合データを取得
+- `GET /api/thumbnails/{scene_pk}`: サムネイル画像を取得
+- `GET /api/stream/{video_id}`: 動画をストリーミング
+- `POST /api/export/edl`: EDLファイルをエクスポート
+- `POST /api/export/srt`: SRTファイルをエクスポート
+
+## 開発者向け情報
+
+### データベースの初期化
+
+```bash
+python create_database.py
+```
+
+### テスト方法
+
+```bash
+python -m pytest tests/
+```
+
+## ライセンス
+
+MIT License
+
+## 作者
+
+[作者名]
+
+## 貢献
+
+1. このリポジトリをフォーク
+2. 新しいブランチを作成 (`git checkout -b feature/amazing-feature`)
+3. 変更をコミット (`git commit -m 'Add some amazing feature'`)
+4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
+5. プルリクエストを作成

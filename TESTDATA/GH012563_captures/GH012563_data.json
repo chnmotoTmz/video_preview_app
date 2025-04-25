@@ -1,0 +1,565 @@
+{
+    "source_filepath": "G:\\100GOPRO\\GH012563.MP4",
+    "file_index": 2,
+    "extracted_audio_filepath": "G:\\100GOPRO\\GH012563.wav",
+    "metadata": {
+        "duration_seconds": 110.72,
+        "creation_time_utc": "2016-01-05T21:22:51.000000Z",
+        "timecode_offset": "01:29:42:54"
+    },
+    "transcription_whisper_result": {
+        "text": "一応調べる。 これ放てるんだろうな。 装鉄船に乗んねやろうな、今日は。 なんかもう何に乗るかちゅうの分かってないからな。 装鉄船でいいんだろう。 とりあえず装鉄船に乗ろう。 しかし行き先をちゃんと調べないとね。 大山。 すごいな、この準備の無さ。 伊勢原町? どうやって行くんや、これ、今日は。 経路。 ほう。 いや、1時間40分もかかんの? 装鉄船だな。 おー1時間40分もかかりますね 7時横浜出て 総鉄乗って 海老名か 海老名から小田急乗って 伊勢原なんだね よしこれで行こう 総鉄線特急7時半分 これだな これ乗ってか",
+        "segments": [
+            {
+                "start": 21.97,
+                "end": 22.65,
+                "text": "一応調べる。"
+            },
+            {
+                "start": 23.27,
+                "end": 32.74,
+                "text": "これ放てるんだろうな。"
+            },
+            {
+                "start": 33.78,
+                "end": 35.4,
+                "text": "装鉄船に乗んねやろうな、今日は。"
+            },
+            {
+                "start": 38.12,
+                "end": 40.58,
+                "text": "なんかもう何に乗るかちゅうの分かってないからな。"
+            },
+            {
+                "start": 41.5,
+                "end": 42.56,
+                "text": "装鉄船でいいんだろう。"
+            },
+            {
+                "start": 43.45,
+                "end": 44.89,
+                "text": "とりあえず装鉄船に乗ろう。"
+            },
+            {
+                "start": 46.86,
+                "end": 49.04,
+                "text": "しかし行き先をちゃんと調べないとね。"
+            },
+            {
+                "start": 49.86,
+                "end": 50.38,
+                "text": "大山。"
+            },
+            {
+                "start": 57.48,
+                "end": 58.88,
+                "text": "すごいな、この準備の無さ。"
+            },
+            {
+                "start": 59.95,
+                "end": 60.91,
+                "text": "伊勢原町?"
+            },
+            {
+                "start": 62.41,
+                "end": 63.83,
+                "text": "どうやって行くんや、これ、今日は。"
+            },
+            {
+                "start": 65.44,
+                "end": 65.86,
+                "text": "経路。"
+            },
+            {
+                "start": 66.92,
+                "end": 67.34,
+                "text": "ほう。"
+            },
+            {
+                "start": 69.45,
+                "end": 71.09,
+                "text": "いや、1時間40分もかかんの?"
+            },
+            {
+                "start": 73.46,
+                "end": 74.32,
+                "text": "装鉄船だな。"
+            },
+            {
+                "start": 75.46,
+                "end": 78.0,
+                "text": "おー1時間40分もかかりますね"
+            },
+            {
+                "start": 78.54,
+                "end": 80.64,
+                "text": "7時横浜出て"
+            },
+            {
+                "start": 81.14,
+                "end": 82.2,
+                "text": "総鉄乗って"
+            },
+            {
+                "start": 82.2,
+                "end": 83.24,
+                "text": "海老名か"
+            },
+            {
+                "start": 83.8,
+                "end": 85.6,
+                "text": "海老名から小田急乗って"
+            },
+            {
+                "start": 85.6,
+                "end": 86.46,
+                "text": "伊勢原なんだね"
+            },
+            {
+                "start": 87.18,
+                "end": 88.34,
+                "text": "よしこれで行こう"
+            },
+            {
+                "start": 89.84,
+                "end": 92.99,
+                "text": "総鉄線特急7時半分"
+            },
+            {
+                "start": 93.72,
+                "end": 94.42,
+                "text": "これだな"
+            },
+            {
+                "start": 95.51,
+                "end": 96.37,
+                "text": "これ乗ってか"
+            }
+        ],
+        "language": "ja"
+    },
+    "detected_scenes": [
+        {
+            "scene_id": 1,
+            "start_timecode": "00:00:00:00",
+            "end_timecode": "00:00:13:00",
+            "description": "マスク姿の女性が歩くショッピングモールの通路には、閉店した店舗の前で警備員が立っており、エスカレーターの入り口は赤いバーで仕切られている、閑散とした様子が伺える。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0001.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 2,
+            "start_timecode": "00:00:13:00",
+            "end_timecode": "00:00:19:31",
+            "description": "エスカレーターの上から撮影された写真で、黒い靴を履いた人物が乗っており、手すりと黄色のラインが入ったステップが写っている、一般的なエスカレーターの光景です。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0002.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 3,
+            "start_timecode": "00:00:19:31",
+            "end_timecode": "00:00:21:31",
+            "description": "ブレてよく見えないが、エスカレーターの手すりを捉えた写真で、動きがあるため、または撮影時のミスにより、全体的にぼやけている様子がうかがえる。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0003.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": "PoorQuality",
+            "scene_evaluation_tag": "PoorQuality"
+        },
+        {
+            "scene_id": 4,
+            "start_timecode": "00:00:21:31",
+            "end_timecode": "00:00:34:32",
+            "description": "レンガの壁が続く通路で、人がスマートフォンを操作している様子が映されており、奥には開けた空間が見えるが、スマートフォンの画面が大きく映っていて、何を見ているかは不明である。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0004.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 5,
+            "start_timecode": "00:00:34:32",
+            "end_timecode": "00:00:55:03",
+            "description": "地下鉄の改札口付近の風景で、数人が通路を歩いており、広告が表示された柱や案内表示が見られます。手前にはスマートフォンが写っています。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0005.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 6,
+            "start_timecode": "00:00:55:03",
+            "end_timecode": "00:00:56:03",
+            "description": "日本の駅の改札口付近で、路線図などの情報が表示された壁があり、奥には人が歩いており、手前にはスマホを操作している人物が写っている一般的な光景です。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0006.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 7,
+            "start_timecode": "00:00:56:03",
+            "end_timecode": "00:01:00:03",
+            "description": "駅の改札前で、スマホを操作している人物が写っており、広告が表示されたディスプレイや自動改札機、駅構内の様子が背景に見える一般的な風景です。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0007.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 8,
+            "start_timecode": "00:01:00:03",
+            "end_timecode": "00:01:15:34",
+            "description": "駅構内でスマートフォンを使ってナビゲーションアプリを確認している様子が写っており、周囲には広告や案内表示、店舗などが見られる一般的な駅の風景である。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0008.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 9,
+            "start_timecode": "00:01:15:34",
+            "end_timecode": "00:01:21:04",
+            "description": "駅のホームで、公共交通機関の乗り換え情報をスマホで確認している様子が写っており、背景には広告や自動販売機、人の往来が見られる。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0009.jpg",
+            "scene_good_reason": "Informative",
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Informative"
+        },
+        {
+            "scene_id": 10,
+            "start_timecode": "00:01:21:04",
+            "end_timecode": "00:01:36:35",
+            "description": "電車のホームで、到着した電車を背景に、手元でスマートフォンの地図アプリを確認している様子が写されており、駅の案内表示や広告も見られる、日本の典型的な鉄道駅の風景です。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0010.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 11,
+            "start_timecode": "00:01:36:35",
+            "end_timecode": "00:01:50:06",
+            "description": "横浜駅のホームに停車中の電車が写っており、ホームには広告が掲載された柵や、乗客と思われる人が見える、日常的な駅の風景である。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0011.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 12,
+            "start_timecode": "00:01:50:06",
+            "end_timecode": "00:01:50:42",
+            "description": "電車のドア付近のプラットフォームで、点字ブロックに沿って黄色い手袋をした人物が立っており、近くには電車の行先案内表示が見え、整然としたタイルの床が広がっている。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012563_captures\\scene_0012.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        }
+    ],
+    "final_segments": [
+        {
+            "start_timecode": "00:00:21:58",
+            "end_timecode": "00:00:22:39",
+            "transcription": "一応調べる。",
+            "scene_id": 4,
+            "scene_description": "レンガの壁が続く通路で、人がスマートフォンを操作している様子が映されており、奥には開けた空間が見えるが、スマートフォンの画面が大きく映っていて、何を見ているかは不明である。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:00:23:16",
+            "end_timecode": "00:00:32:44",
+            "transcription": "これ放てるんだろうな。",
+            "scene_id": 4,
+            "scene_description": "レンガの壁が続く通路で、人がスマートフォンを操作している様子が映されており、奥には開けた空間が見えるが、スマートフォンの画面が大きく映っていて、何を見ているかは不明である。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:00:33:46",
+            "end_timecode": "00:00:35:24",
+            "transcription": "装鉄船に乗んねやろうな、今日は。",
+            "scene_id": 5,
+            "scene_description": "地下鉄の改札口付近の風景で、数人が通路を歩いており、広告が表示された柱や案内表示が見られます。手前にはスマートフォンが写っています。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:00:38:07",
+            "end_timecode": "00:00:40:34",
+            "transcription": "なんかもう何に乗るかちゅうの分かってないからな。",
+            "scene_id": 5,
+            "scene_description": "地下鉄の改札口付近の風景で、数人が通路を歩いており、広告が表示された柱や案内表示が見られます。手前にはスマートフォンが写っています。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:00:41:30",
+            "end_timecode": "00:00:42:33",
+            "transcription": "装鉄船でいいんだろう。",
+            "scene_id": 5,
+            "scene_description": "地下鉄の改札口付近の風景で、数人が通路を歩いており、広告が表示された柱や案内表示が見られます。手前にはスマートフォンが写っています。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:00:43:27",
+            "end_timecode": "00:00:44:53",
+            "transcription": "とりあえず装鉄船に乗ろう。",
+            "scene_id": 5,
+            "scene_description": "地下鉄の改札口付近の風景で、数人が通路を歩いており、広告が表示された柱や案内表示が見られます。手前にはスマートフォンが写っています。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:00:46:51",
+            "end_timecode": "00:00:49:02",
+            "transcription": "しかし行き先をちゃんと調べないとね。",
+            "scene_id": 5,
+            "scene_description": "地下鉄の改札口付近の風景で、数人が通路を歩いており、広告が表示された柱や案内表示が見られます。手前にはスマートフォンが写っています。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:00:49:51",
+            "end_timecode": "00:00:50:22",
+            "transcription": "大山。",
+            "scene_id": 5,
+            "scene_description": "地下鉄の改札口付近の風景で、数人が通路を歩いており、広告が表示された柱や案内表示が見られます。手前にはスマートフォンが写っています。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:00:57:28",
+            "end_timecode": "00:00:58:52",
+            "transcription": "すごいな、この準備の無さ。",
+            "scene_id": 7,
+            "scene_description": "駅の改札前で、スマホを操作している人物が写っており、広告が表示されたディスプレイや自動改札機、駅構内の様子が背景に見える一般的な風景です。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:00:59:57",
+            "end_timecode": "00:01:00:54",
+            "transcription": "伊勢原町?",
+            "scene_id": 8,
+            "scene_description": "駅構内でスマートフォンを使ってナビゲーションアプリを確認している様子が写っており、周囲には広告や案内表示、店舗などが見られる一般的な駅の風景である。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:02:24",
+            "end_timecode": "00:01:03:49",
+            "transcription": "どうやって行くんや、これ、今日は。",
+            "scene_id": 8,
+            "scene_description": "駅構内でスマートフォンを使ってナビゲーションアプリを確認している様子が写っており、周囲には広告や案内表示、店舗などが見られる一般的な駅の風景である。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:05:26",
+            "end_timecode": "00:01:05:51",
+            "transcription": "経路。",
+            "scene_id": 8,
+            "scene_description": "駅構内でスマートフォンを使ってナビゲーションアプリを確認している様子が写っており、周囲には広告や案内表示、店舗などが見られる一般的な駅の風景である。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:06:55",
+            "end_timecode": "00:01:07:20",
+            "transcription": "ほう。",
+            "scene_id": 8,
+            "scene_description": "駅構内でスマートフォンを使ってナビゲーションアプリを確認している様子が写っており、周囲には広告や案内表示、店舗などが見られる一般的な駅の風景である。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:09:27",
+            "end_timecode": "00:01:11:05",
+            "transcription": "いや、1時間40分もかかんの?",
+            "scene_id": 8,
+            "scene_description": "駅構内でスマートフォンを使ってナビゲーションアプリを確認している様子が写っており、周囲には広告や案内表示、店舗などが見られる一般的な駅の風景である。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:13:27",
+            "end_timecode": "00:01:14:19",
+            "transcription": "装鉄船だな。",
+            "scene_id": 8,
+            "scene_description": "駅構内でスマートフォンを使ってナビゲーションアプリを確認している様子が写っており、周囲には広告や案内表示、店舗などが見られる一般的な駅の風景である。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:15:27",
+            "end_timecode": "00:01:18:00",
+            "transcription": "おー1時間40分もかかりますね",
+            "scene_id": 9,
+            "scene_description": "駅のホームで、公共交通機関の乗り換え情報をスマホで確認している様子が写っており、背景には広告や自動販売機、人の往来が見られる。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:18:32",
+            "end_timecode": "00:01:20:38",
+            "transcription": "7時横浜出て",
+            "scene_id": 9,
+            "scene_description": "駅のホームで、公共交通機関の乗り換え情報をスマホで確認している様子が写っており、背景には広告や自動販売機、人の往来が見られる。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:21:08",
+            "end_timecode": "00:01:22:12",
+            "transcription": "総鉄乗って",
+            "scene_id": 10,
+            "scene_description": "電車のホームで、到着した電車を背景に、手元でスマートフォンの地図アプリを確認している様子が写されており、駅の案内表示や広告も見られる、日本の典型的な鉄道駅の風景です。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": "Typo",
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:22:12",
+            "end_timecode": "00:01:23:14",
+            "transcription": "海老名か",
+            "scene_id": 10,
+            "scene_description": "電車のホームで、到着した電車を背景に、手元でスマートフォンの地図アプリを確認している様子が写されており、駅の案内表示や広告も見られる、日本の典型的な鉄道駅の風景です。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:23:48",
+            "end_timecode": "00:01:25:36",
+            "transcription": "海老名から小田急乗って",
+            "scene_id": 10,
+            "scene_description": "電車のホームで、到着した電車を背景に、手元でスマートフォンの地図アプリを確認している様子が写されており、駅の案内表示や広告も見られる、日本の典型的な鉄道駅の風景です。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:25:36",
+            "end_timecode": "00:01:26:27",
+            "transcription": "伊勢原なんだね",
+            "scene_id": 10,
+            "scene_description": "電車のホームで、到着した電車を背景に、手元でスマートフォンの地図アプリを確認している様子が写されており、駅の案内表示や広告も見られる、日本の典型的な鉄道駅の風景です。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:27:10",
+            "end_timecode": "00:01:28:20",
+            "transcription": "よしこれで行こう",
+            "scene_id": 10,
+            "scene_description": "電車のホームで、到着した電車を背景に、手元でスマートフォンの地図アプリを確認している様子が写されており、駅の案内表示や広告も見られる、日本の典型的な鉄道駅の風景です。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:29:50",
+            "end_timecode": "00:01:32:59",
+            "transcription": "総鉄線特急7時半分",
+            "scene_id": 10,
+            "scene_description": "電車のホームで、到着した電車を背景に、手元でスマートフォンの地図アプリを確認している様子が写されており、駅の案内表示や広告も見られる、日本の典型的な鉄道駅の風景です。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:33:43",
+            "end_timecode": "00:01:34:25",
+            "transcription": "これだな",
+            "scene_id": 10,
+            "scene_description": "電車のホームで、到着した電車を背景に、手元でスマートフォンの地図アプリを確認している様子が写されており、駅の案内表示や広告も見られる、日本の典型的な鉄道駅の風景です。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        },
+        {
+            "start_timecode": "00:01:35:30",
+            "end_timecode": "00:01:36:22",
+            "transcription": "これ乗ってか",
+            "scene_id": 10,
+            "scene_description": "電車のホームで、到着した電車を背景に、手元でスマートフォンの地図アプリを確認している様子が写されており、駅の案内表示や広告も見られる、日本の典型的な鉄道駅の風景です。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:29:42:54",
+            "source_filename": "GH012563.MP4",
+            "file_index": 2
+        }
+    ]
+}

@@ -1,0 +1,843 @@
+{
+    "source_filepath": "G:\\100GOPRO\\GH012562.MP4",
+    "file_index": 1,
+    "extracted_audio_filepath": "G:\\100GOPRO\\GH012562.wav",
+    "metadata": {
+        "duration_seconds": 221.221,
+        "creation_time_utc": "2016-01-05T21:14:57.000000Z",
+        "timecode_offset": "01:21:49:54"
+    },
+    "transcription_whisper_result": {
+        "text": "おはようございます。 今日は2月の8日ですね、土曜日。 ちょっとね、私はやっぱりね、山に登らないと健康を害するというのがね、分かってきてますからね。 自宅は寒かったんですけどね、やっぱりね。 今日は登ることにしましたよ、ね。 いつまで横浜にいるか分からないですからね。 とりあえずね 今日はね 前に6月ぐらいにヒルで撤退した大山に登ることにしました ちょっとね 天気を調べたら やっぱりね 山頂1200mぐらいはね 氷点下ぐらいになってるんですよね 氷点下ってね 私あんまり経験がないのでね ちょっと今日はね、服装とかね、結構悩んだんですけどね まあとりあえず雪山装備をそこそこ持ってきてますよ まあこれまた動画にするとき、編集大変なんですけど 今回はね、朝からね、足のね、かかとのひび割れがね、痛くてね そこの手当てをしてましたよ バセリン塗ったりね まあ今ちょっとだいぶケアしたから 大丈夫だとは思うんですけどね やっぱ冬の登山はね いろんなことありますよね 不安だな今日も どういうことをしていいのか まだ分かってないかな 不安ですよ 今日は出遅れたよね 朝7時 いや、7時だとね、どうやって行くかもあんまり調べてないんですよね。 むちゃくちゃやな、毎回。 ほとんどやる気がないよな、登山と言っても。 決断したのがね、5時ですよ。 今日は家で、なんかもうゆっくりしようかなと思ったけどね。 やっぱりね、明日はもうね、家にいるでしょ。 やっぱりね、筋肉がね、減ってくると体が冷えるんですよね。 でね、山行くとね、ポカポカポカポカして、次の日がものすごく過ごしやすいんですよ。 もうそのためだけ、まさにそのためだけに、山に登っているっていうね、完全に健康維持ですよ。健康維持。 温泉に行きたいな、さらに。7時だしね。 ちょっとね、寒いわ。毎回動画撮ってるけどな。 これはもう、どういう風に今日終えるのか、よくわからんぞ、俺は。 もはや、まあええわ、今日は一人やしな。 なんか、準備もごたごただし。",
+        "segments": [
+            {
+                "start": 3.88,
+                "end": 4.66,
+                "text": "おはようございます。"
+            },
+            {
+                "start": 6.7,
+                "end": 10.13,
+                "text": "今日は2月の8日ですね、土曜日。"
+            },
+            {
+                "start": 12.09,
+                "end": 21.31,
+                "text": "ちょっとね、私はやっぱりね、山に登らないと健康を害するというのがね、分かってきてますからね。"
+            },
+            {
+                "start": 22.37,
+                "end": 25.65,
+                "text": "自宅は寒かったんですけどね、やっぱりね。"
+            },
+            {
+                "start": 26.37,
+                "end": 29.07,
+                "text": "今日は登ることにしましたよ、ね。"
+            },
+            {
+                "start": 31.68,
+                "end": 33.76,
+                "text": "いつまで横浜にいるか分からないですからね。"
+            },
+            {
+                "start": 34.62,
+                "end": 44.58,
+                "text": "とりあえずね 今日はね 前に6月ぐらいにヒルで撤退した大山に登ることにしました"
+            },
+            {
+                "start": 47.98,
+                "end": 58.45,
+                "text": "ちょっとね 天気を調べたら やっぱりね 山頂1200mぐらいはね 氷点下ぐらいになってるんですよね"
+            },
+            {
+                "start": 59.44,
+                "end": 63.86,
+                "text": "氷点下ってね 私あんまり経験がないのでね"
+            },
+            {
+                "start": 64.64,
+                "end": 69.78,
+                "text": "ちょっと今日はね、服装とかね、結構悩んだんですけどね"
+            },
+            {
+                "start": 70.98,
+                "end": 77.31,
+                "text": "まあとりあえず雪山装備をそこそこ持ってきてますよ"
+            },
+            {
+                "start": 79.8,
+                "end": 85.35,
+                "text": "まあこれまた動画にするとき、編集大変なんですけど"
+            },
+            {
+                "start": 86.3,
+                "end": 93.89,
+                "text": "今回はね、朝からね、足のね、かかとのひび割れがね、痛くてね"
+            },
+            {
+                "start": 94.86,
+                "end": 96.78,
+                "text": "そこの手当てをしてましたよ"
+            },
+            {
+                "start": 97.64,
+                "end": 99.12,
+                "text": "バセリン塗ったりね"
+            },
+            {
+                "start": 100.04,
+                "end": 102.94,
+                "text": "まあ今ちょっとだいぶケアしたから"
+            },
+            {
+                "start": 103.8,
+                "end": 105.46,
+                "text": "大丈夫だとは思うんですけどね"
+            },
+            {
+                "start": 106.28,
+                "end": 108.0,
+                "text": "やっぱ冬の登山はね"
+            },
+            {
+                "start": 108.73,
+                "end": 110.21,
+                "text": "いろんなことありますよね"
+            },
+            {
+                "start": 111.17,
+                "end": 113.07,
+                "text": "不安だな今日も"
+            },
+            {
+                "start": 114.15,
+                "end": 116.11,
+                "text": "どういうことをしていいのか"
+            },
+            {
+                "start": 116.11,
+                "end": 117.79,
+                "text": "まだ分かってないかな"
+            },
+            {
+                "start": 117.79,
+                "end": 120.31,
+                "text": "不安ですよ"
+            },
+            {
+                "start": 124.04,
+                "end": 125.16,
+                "text": "今日は出遅れたよね"
+            },
+            {
+                "start": 126.75,
+                "end": 127.85,
+                "text": "朝7時"
+            },
+            {
+                "start": 127.85,
+                "end": 134.98,
+                "text": "いや、7時だとね、どうやって行くかもあんまり調べてないんですよね。"
+            },
+            {
+                "start": 136.98,
+                "end": 138.62,
+                "text": "むちゃくちゃやな、毎回。"
+            },
+            {
+                "start": 139.34,
+                "end": 142.52,
+                "text": "ほとんどやる気がないよな、登山と言っても。"
+            },
+            {
+                "start": 143.04,
+                "end": 145.8,
+                "text": "決断したのがね、5時ですよ。"
+            },
+            {
+                "start": 146.72,
+                "end": 150.86,
+                "text": "今日は家で、なんかもうゆっくりしようかなと思ったけどね。"
+            },
+            {
+                "start": 151.48,
+                "end": 154.92,
+                "text": "やっぱりね、明日はもうね、家にいるでしょ。"
+            },
+            {
+                "start": 155.8,
+                "end": 161.0,
+                "text": "やっぱりね、筋肉がね、減ってくると体が冷えるんですよね。"
+            },
+            {
+                "start": 161.66,
+                "end": 168.5,
+                "text": "でね、山行くとね、ポカポカポカポカして、次の日がものすごく過ごしやすいんですよ。"
+            },
+            {
+                "start": 169.14,
+                "end": 180.28,
+                "text": "もうそのためだけ、まさにそのためだけに、山に登っているっていうね、完全に健康維持ですよ。健康維持。"
+            },
+            {
+                "start": 180.82,
+                "end": 188.5,
+                "text": "温泉に行きたいな、さらに。7時だしね。"
+            },
+            {
+                "start": 190.92,
+                "end": 199.58,
+                "text": "ちょっとね、寒いわ。毎回動画撮ってるけどな。"
+            },
+            {
+                "start": 200.82,
+                "end": 206.44,
+                "text": "これはもう、どういう風に今日終えるのか、よくわからんぞ、俺は。"
+            },
+            {
+                "start": 207.43,
+                "end": 212.93,
+                "text": "もはや、まあええわ、今日は一人やしな。"
+            },
+            {
+                "start": 213.27,
+                "end": 218.24,
+                "text": "なんか、準備もごたごただし。"
+            }
+        ],
+        "language": "ja"
+    },
+    "detected_scenes": [
+        {
+            "scene_id": 1,
+            "start_timecode": "00:00:00:00",
+            "end_timecode": "00:00:22:01",
+            "description": "キャップを被りバックパックを背負った男性が、建物や階段などが見える街中で、カメラに向かって何かを話しているような様子が写っている。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0001.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 2,
+            "start_timecode": "00:00:22:01",
+            "end_timecode": "00:00:23:01",
+            "description": "リュックを背負った男性が建物の前を歩きながら、カメラに向かって話している様子を至近距離から撮影した、日常的な光景のスナップショットです。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0002.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 3,
+            "start_timecode": "00:00:23:01",
+            "end_timecode": "00:00:54:33",
+            "description": "キャップを被りネックウォーマーを付けた男性が、リュックを背負い、街中の歩道橋のような場所から通りを見下ろしている様子が写っており、背景には建物が見える。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0003.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 4,
+            "start_timecode": "00:00:54:33",
+            "end_timecode": "00:01:08:04",
+            "description": "キャップを被りネックウォーマーを付けた男性が、トヨタレンタカーの看板が見える歩道橋を上っている様子を正面から撮影しており、顔の表情がやや疲れているように見える。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0004.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 5,
+            "start_timecode": "00:01:08:04",
+            "end_timecode": "00:01:13:34",
+            "description": "帽子をかぶりリュックを背負った男性が、横浜駅西口方面へ繋がる歩道橋の階段を上っている様子が写されており、背景には駅周辺の建物や看板が見える。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0005.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 6,
+            "start_timecode": "00:01:13:34",
+            "end_timecode": "00:01:17:34",
+            "description": "帽子をかぶりリュックを背負った男性が、歩道橋の階段を登っている様子で、近くには横浜駅西口へ向かう案内が見え、ビルの看板には眼科の文字が確認できる。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0006.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 7,
+            "start_timecode": "00:01:17:34",
+            "end_timecode": "00:01:20:04",
+            "description": "キャップを被った男性が歩道橋の手前におり、背景には「深作眼科」と書かれた建物やバス、道路標識が見え、日常的な街の風景を捉えています。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0007.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 8,
+            "start_timecode": "00:01:20:04",
+            "end_timecode": "00:01:38:05",
+            "description": "帽子を被り、バックパックを背負った男性が、日本の街中でカメラに向かって話しかけている様子で、背景には建物や歩道橋が見える。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0008.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 9,
+            "start_timecode": "00:01:38:05",
+            "end_timecode": "00:01:50:06",
+            "description": "カメラ目線の男性が市街地の歩道を歩きながら、何らかの情報を伝えている様子で、背景には建物や道路、標識などが写っており、日常的な風景が伺える。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0009.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 10,
+            "start_timecode": "00:01:50:06",
+            "end_timecode": "00:01:53:06",
+            "description": "キャップを被りネックウォーマーをした男性が、市街地の道路脇を歩いている様子が捉えられており、背景には建物や標識、横断歩道橋などが写っている。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0010.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 11,
+            "start_timecode": "00:01:53:06",
+            "end_timecode": "00:02:02:37",
+            "description": "帽子を被り、リュックを背負った男性が、黄色い手袋をした手で何かを口に運ぼうとしており、背景には日本の都市部の建物や道路が見える、歩道からの視点と思われる風景です。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0011.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 12,
+            "start_timecode": "00:02:02:37",
+            "end_timecode": "00:02:45:39",
+            "description": "カメラに向かって笑顔を見せる男性が、街中でリュックを背負って歩いている様子を捉えた写真で、背景には建物や道路が見え、日常的な風景が広がっている。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0012.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 13,
+            "start_timecode": "00:02:45:39",
+            "end_timecode": "00:02:49:40",
+            "description": "カメラ目線の男性が、リュックを背負いネックウォーマーを身につけ、銀行の看板が見える街中を歩いている様子が、手持ちカメラで撮影された視点から捉えられている。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0013.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 14,
+            "start_timecode": "00:02:49:40",
+            "end_timecode": "00:03:09:41",
+            "description": "リュックを背負った男性が、りそな銀行やバス乗り場を示す標識がある街中を歩いている様子が、自撮りのようなアングルで捉えられている。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0014.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 15,
+            "start_timecode": "00:03:09:41",
+            "end_timecode": "00:03:34:12",
+            "description": "帽子をかぶった男性が、バス停に立って何かを見上げている様子が写っており、背中にはリュックを背負い、周囲には建物や道路が見える、街中の日常的な風景を捉えた写真です。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0015.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 16,
+            "start_timecode": "00:03:34:12",
+            "end_timecode": "00:03:41:05",
+            "description": "東京スター銀行の看板とバス停が見える街角で、カメラに近い位置にいる男性が話している様子が捉えられており、リュックを背負い、カジュアルな服装をしている。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012562_captures\\scene_0016.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        }
+    ],
+    "final_segments": [
+        {
+            "start_timecode": "00:00:03:52",
+            "end_timecode": "00:00:04:39",
+            "transcription": "おはようございます。",
+            "scene_id": 1,
+            "scene_description": "キャップを被りバックパックを背負った男性が、建物や階段などが見える街中で、カメラに向かって何かを話しているような様子が写っている。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:00:06:42",
+            "end_timecode": "00:00:10:07",
+            "transcription": "今日は2月の8日ですね、土曜日。",
+            "scene_id": 1,
+            "scene_description": "キャップを被りバックパックを背負った男性が、建物や階段などが見える街中で、カメラに向かって何かを話しているような様子が写っている。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:00:12:05",
+            "end_timecode": "00:00:21:18",
+            "transcription": "ちょっとね、私はやっぱりね、山に登らないと健康を害するというのがね、分かってきてますからね。",
+            "scene_id": 1,
+            "scene_description": "キャップを被りバックパックを背負った男性が、建物や階段などが見える街中で、カメラに向かって何かを話しているような様子が写っている。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:00:22:22",
+            "end_timecode": "00:00:25:39",
+            "transcription": "自宅は寒かったんですけどね、やっぱりね。",
+            "scene_id": 3,
+            "scene_description": "キャップを被りネックウォーマーを付けた男性が、リュックを背負い、街中の歩道橋のような場所から通りを見下ろしている様子が写っており、背景には建物が見える。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:00:26:22",
+            "end_timecode": "00:00:29:04",
+            "transcription": "今日は登ることにしましたよ、ね。",
+            "scene_id": 3,
+            "scene_description": "キャップを被りネックウォーマーを付けた男性が、リュックを背負い、街中の歩道橋のような場所から通りを見下ろしている様子が写っており、背景には建物が見える。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:00:31:40",
+            "end_timecode": "00:00:33:45",
+            "transcription": "いつまで横浜にいるか分からないですからね。",
+            "scene_id": 3,
+            "scene_description": "キャップを被りネックウォーマーを付けた男性が、リュックを背負い、街中の歩道橋のような場所から通りを見下ろしている様子が写っており、背景には建物が見える。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:00:34:37",
+            "end_timecode": "00:00:44:34",
+            "transcription": "とりあえずね今日はね前に6月ぐらいにヒルで撤退した大山に登ることにしました",
+            "scene_id": 3,
+            "scene_description": "キャップを被りネックウォーマーを付けた男性が、リュックを背負い、街中の歩道橋のような場所から通りを見下ろしている様子が写っており、背景には建物が見える。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:00:47:58",
+            "end_timecode": "00:00:58:27",
+            "transcription": "ちょっとね天気を調べたらやっぱりね山頂1200mぐらいはね氷点下ぐらいになってるんですよね",
+            "scene_id": 3,
+            "scene_description": "キャップを被りネックウォーマーを付けた男性が、リュックを背負い、街中の歩道橋のような場所から通りを見下ろしている様子が写っており、背景には建物が見える。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:00:59:26",
+            "end_timecode": "00:01:03:51",
+            "transcription": "氷点下ってね私あんまり経験がないのでね",
+            "scene_id": 4,
+            "scene_description": "キャップを被りネックウォーマーを付けた男性が、トヨタレンタカーの看板が見える歩道橋を上っている様子を正面から撮影しており、顔の表情がやや疲れているように見える。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:04:38",
+            "end_timecode": "00:01:09:46",
+            "transcription": "ちょっと今日はね、服装とかね、結構悩んだんですけどね",
+            "scene_id": 4,
+            "scene_description": "キャップを被りネックウォーマーを付けた男性が、トヨタレンタカーの看板が見える歩道橋を上っている様子を正面から撮影しており、顔の表情がやや疲れているように見える。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:10:58",
+            "end_timecode": "00:01:17:18",
+            "transcription": "まあとりあえず雪山装備をそこそこ持ってきてますよ",
+            "scene_id": 6,
+            "scene_description": "帽子をかぶりリュックを背負った男性が、歩道橋の階段を登っている様子で、近くには横浜駅西口へ向かう案内が見え、ビルの看板には眼科の文字が確認できる。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:19:48",
+            "end_timecode": "00:01:25:21",
+            "transcription": "まあこれまた動画にするとき、編集大変なんですけど",
+            "scene_id": 8,
+            "scene_description": "帽子を被り、バックパックを背負った男性が、日本の街中でカメラに向かって話しかけている様子で、背景には建物や歩道橋が見える。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:26:18",
+            "end_timecode": "00:01:33:53",
+            "transcription": "今回はね、朝からね、足のね、かかとのひび割れがね、痛くてね",
+            "scene_id": 8,
+            "scene_description": "帽子を被り、バックパックを背負った男性が、日本の街中でカメラに向かって話しかけている様子で、背景には建物や歩道橋が見える。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:34:51",
+            "end_timecode": "00:01:36:46",
+            "transcription": "そこの手当てをしてましたよ",
+            "scene_id": 8,
+            "scene_description": "帽子を被り、バックパックを背負った男性が、日本の街中でカメラに向かって話しかけている様子で、背景には建物や歩道橋が見える。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:37:38",
+            "end_timecode": "00:01:39:07",
+            "transcription": "バセリン塗ったりね",
+            "scene_id": 9,
+            "scene_description": "カメラ目線の男性が市街地の歩道を歩きながら、何らかの情報を伝えている様子で、背景には建物や道路、標識などが写っており、日常的な風景が伺える。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:40:02",
+            "end_timecode": "00:01:42:56",
+            "transcription": "まあ今ちょっとだいぶケアしたから",
+            "scene_id": 9,
+            "scene_description": "カメラ目線の男性が市街地の歩道を歩きながら、何らかの情報を伝えている様子で、背景には建物や道路、標識などが写っており、日常的な風景が伺える。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:43:48",
+            "end_timecode": "00:01:45:27",
+            "transcription": "大丈夫だとは思うんですけどね",
+            "scene_id": 9,
+            "scene_description": "カメラ目線の男性が市街地の歩道を歩きながら、何らかの情報を伝えている様子で、背景には建物や道路、標識などが写っており、日常的な風景が伺える。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:46:16",
+            "end_timecode": "00:01:48:00",
+            "transcription": "やっぱ冬の登山はね",
+            "scene_id": 9,
+            "scene_description": "カメラ目線の男性が市街地の歩道を歩きながら、何らかの情報を伝えている様子で、背景には建物や道路、標識などが写っており、日常的な風景が伺える。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:48:43",
+            "end_timecode": "00:01:50:12",
+            "transcription": "いろんなことありますよね",
+            "scene_id": 9,
+            "scene_description": "カメラ目線の男性が市街地の歩道を歩きながら、何らかの情報を伝えている様子で、背景には建物や道路、標識などが写っており、日常的な風景が伺える。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:51:10",
+            "end_timecode": "00:01:53:04",
+            "transcription": "不安だな今日も",
+            "scene_id": 10,
+            "scene_description": "キャップを被りネックウォーマーをした男性が、市街地の道路脇を歩いている様子が捉えられており、背景には建物や標識、横断歩道橋などが写っている。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:54:09",
+            "end_timecode": "00:01:56:06",
+            "transcription": "どういうことをしていいのか",
+            "scene_id": 11,
+            "scene_description": "帽子を被り、リュックを背負った男性が、黄色い手袋をした手で何かを口に運ぼうとしており、背景には日本の都市部の建物や道路が見える、歩道からの視点と思われる風景です。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:56:06",
+            "end_timecode": "00:01:57:47",
+            "transcription": "まだ分かってないかな",
+            "scene_id": 11,
+            "scene_description": "帽子を被り、リュックを背負った男性が、黄色い手袋をした手で何かを口に運ぼうとしており、背景には日本の都市部の建物や道路が見える、歩道からの視点と思われる風景です。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:01:57:47",
+            "end_timecode": "00:02:00:18",
+            "transcription": "不安ですよ",
+            "scene_id": 11,
+            "scene_description": "帽子を被り、リュックを背負った男性が、黄色い手袋をした手で何かを口に運ぼうとしており、背景には日本の都市部の建物や道路が見える、歩道からの視点と思われる風景です。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:02:04:02",
+            "end_timecode": "00:02:05:09",
+            "transcription": "今日は出遅れたよね",
+            "scene_id": 12,
+            "scene_description": "カメラに向かって笑顔を見せる男性が、街中でリュックを背負って歩いている様子を捉えた写真で、背景には建物や道路が見え、日常的な風景が広がっている。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:02:06:45",
+            "end_timecode": "00:02:07:51",
+            "transcription": "朝7時",
+            "scene_id": 12,
+            "scene_description": "カメラに向かって笑顔を見せる男性が、街中でリュックを背負って歩いている様子を捉えた写真で、背景には建物や道路が見え、日常的な風景が広がっている。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:02:07:51",
+            "end_timecode": "00:02:14:58",
+            "transcription": "いや、7時だとね、どうやって行くかもあんまり調べてないんですよね。",
+            "scene_id": 12,
+            "scene_description": "カメラに向かって笑顔を見せる男性が、街中でリュックを背負って歩いている様子を捉えた写真で、背景には建物や道路が見え、日常的な風景が広がっている。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:02:16:58",
+            "end_timecode": "00:02:18:37",
+            "transcription": "むちゃくちゃやな、毎回。",
+            "scene_id": 12,
+            "scene_description": "カメラに向かって笑顔を見せる男性が、街中でリュックを背負って歩いている様子を捉えた写真で、背景には建物や道路が見え、日常的な風景が広がっている。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:02:19:20",
+            "end_timecode": "00:02:22:31",
+            "transcription": "ほとんどやる気がないよな、登山と言っても。",
+            "scene_id": 12,
+            "scene_description": "カメラに向かって笑顔を見せる男性が、街中でリュックを背負って歩いている様子を捉えた写真で、背景には建物や道路が見え、日常的な風景が広がっている。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:02:23:02",
+            "end_timecode": "00:02:25:48",
+            "transcription": "決断したのがね、5時ですよ。",
+            "scene_id": 12,
+            "scene_description": "カメラに向かって笑顔を見せる男性が、街中でリュックを背負って歩いている様子を捉えた写真で、背景には建物や道路が見え、日常的な風景が広がっている。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:02:26:43",
+            "end_timecode": "00:02:30:51",
+            "transcription": "今日は家で、なんかもうゆっくりしようかなと思ったけどね。",
+            "scene_id": 12,
+            "scene_description": "カメラに向かって笑顔を見せる男性が、街中でリュックを背負って歩いている様子を捉えた写真で、背景には建物や道路が見え、日常的な風景が広がっている。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:02:31:28",
+            "end_timecode": "00:02:34:55",
+            "transcription": "やっぱりね、明日はもうね、家にいるでしょ。",
+            "scene_id": 12,
+            "scene_description": "カメラに向かって笑顔を見せる男性が、街中でリュックを背負って歩いている様子を捉えた写真で、背景には建物や道路が見え、日常的な風景が広がっている。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:02:35:48",
+            "end_timecode": "00:02:41:00",
+            "transcription": "やっぱりね、筋肉がね、減ってくると体が冷えるんですよね。",
+            "scene_id": 12,
+            "scene_description": "カメラに向かって笑顔を見せる男性が、街中でリュックを背負って歩いている様子を捉えた写真で、背景には建物や道路が見え、日常的な風景が広がっている。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:02:41:39",
+            "end_timecode": "00:02:48:30",
+            "transcription": "でね、山行くとね、ポカポカポカポカして、次の日がものすごく過ごしやすいんですよ。",
+            "scene_id": 12,
+            "scene_description": "カメラに向かって笑顔を見せる男性が、街中でリュックを背負って歩いている様子を捉えた写真で、背景には建物や道路が見え、日常的な風景が広がっている。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:02:49:08",
+            "end_timecode": "00:03:00:16",
+            "transcription": "もうそのためだけ、まさにそのためだけに、山に登っているっていうね、完全に健康維持ですよ。健康維持。",
+            "scene_id": 14,
+            "scene_description": "リュックを背負った男性が、りそな銀行やバス乗り場を示す標識がある街中を歩いている様子が、自撮りのようなアングルで捉えられている。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": "Repetitive",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:03:00:49",
+            "end_timecode": "00:03:08:30",
+            "transcription": "温泉に行きたいな、さらに。7時だしね。",
+            "scene_id": 14,
+            "scene_description": "リュックを背負った男性が、りそな銀行やバス乗り場を示す標識がある街中を歩いている様子が、自撮りのようなアングルで捉えられている。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:03:10:55",
+            "end_timecode": "00:03:19:34",
+            "transcription": "ちょっとね、寒いわ。毎回動画撮ってるけどな。",
+            "scene_id": 15,
+            "scene_description": "帽子をかぶった男性が、バス停に立って何かを見上げている様子が写っており、背中にはリュックを背負い、周囲には建物や道路が見える、街中の日常的な風景を捉えた写真です。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:03:20:49",
+            "end_timecode": "00:03:26:26",
+            "transcription": "これはもう、どういう風に今日終えるのか、よくわからんぞ、俺は。",
+            "scene_id": 15,
+            "scene_description": "帽子をかぶった男性が、バス停に立って何かを見上げている様子が写っており、背中にはリュックを背負い、周囲には建物や道路が見える、街中の日常的な風景を捉えた写真です。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:03:27:25",
+            "end_timecode": "00:03:32:55",
+            "transcription": "もはや、まあええわ、今日は一人やしな。",
+            "scene_id": 15,
+            "scene_description": "帽子をかぶった男性が、バス停に立って何かを見上げている様子が写っており、背中にはリュックを背負い、周囲には建物や道路が見える、街中の日常的な風景を捉えた写真です。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        },
+        {
+            "start_timecode": "00:03:33:16",
+            "end_timecode": "00:03:38:14",
+            "transcription": "なんか、準備もごたごただし。",
+            "scene_id": 16,
+            "scene_description": "東京スター銀行の看板とバス停が見える街角で、カメラに近い位置にいる男性が話している様子が捉えられており、リュックを背負い、カジュアルな服装をしている。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:21:49:54",
+            "source_filename": "GH012562.MP4",
+            "file_index": 1
+        }
+    ]
+}

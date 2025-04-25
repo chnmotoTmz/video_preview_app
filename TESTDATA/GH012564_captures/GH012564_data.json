@@ -1,0 +1,128 @@
+{
+    "source_filepath": "G:\\100GOPRO\\GH012564.MP4",
+    "file_index": 3,
+    "extracted_audio_filepath": "G:\\100GOPRO\\GH012564.wav",
+    "metadata": {
+        "duration_seconds": 19.712,
+        "creation_time_utc": "2016-01-05T21:25:26.000000Z",
+        "timecode_offset": "01:32:17:53"
+    },
+    "transcription_whisper_result": {
+        "text": "総鉄線に乗ってね、海老名まで行きますよ。 海老名から伊勢原。 なんか王道ルートですよね。 この総鉄線に乗るっていうのはね、毎回おなじみになってますからね。",
+        "segments": [
+            {
+                "start": 4.66,
+                "end": 6.94,
+                "text": "総鉄線に乗ってね、海老名まで行きますよ。"
+            },
+            {
+                "start": 7.46,
+                "end": 9.16,
+                "text": "海老名から伊勢原。"
+            },
+            {
+                "start": 10.28,
+                "end": 11.92,
+                "text": "なんか王道ルートですよね。"
+            },
+            {
+                "start": 12.68,
+                "end": 16.32,
+                "text": "この総鉄線に乗るっていうのはね、毎回おなじみになってますからね。"
+            }
+        ],
+        "language": "ja"
+    },
+    "detected_scenes": [
+        {
+            "scene_id": 1,
+            "start_timecode": "00:00:00:00",
+            "end_timecode": "00:00:02:30",
+            "description": "相鉄線の電車が駅のホームに停車しており、車両にはロゴが描かれ、ホームには乗車を促す案内表示が設置されている、日本の典型的な鉄道駅の風景である。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012564_captures\\scene_0001.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 2,
+            "start_timecode": "00:00:02:30",
+            "end_timecode": "00:00:09:30",
+            "description": "リュックを背負った男性が駅のホームで電車を待っている様子で、電車の車内や駅の案内表示が見え、移動中の風景を捉えたスナップショットのようだ。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012564_captures\\scene_0002.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 3,
+            "start_timecode": "00:00:09:30",
+            "end_timecode": "00:00:16:30",
+            "description": "バックパックを背負った男性が、駅のホームに停車中の電車の横で、カメラに向かって話しているような様子が捉えられています。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012564_captures\\scene_0003.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 4,
+            "start_timecode": "00:00:16:30",
+            "end_timecode": "00:00:19:42",
+            "description": "開放された電車のドアから、空いている赤い座席が並ぶ車内と、プラットフォームの一部が見える、乗車時の光景を捉えた画像です。",
+            "thumbnail_path": "G:\\100GOPRO\\GH012564_captures\\scene_0004.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        }
+    ],
+    "final_segments": [
+        {
+            "start_timecode": "00:00:04:39",
+            "end_timecode": "00:00:06:56",
+            "transcription": "総鉄線に乗ってね、海老名まで行きますよ。",
+            "scene_id": 2,
+            "scene_description": "リュックを背負った男性が駅のホームで電車を待っている様子で、電車の車内や駅の案内表示が見え、移動中の風景を捉えたスナップショットのようだ。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "01:32:17:53",
+            "source_filename": "GH012564.MP4",
+            "file_index": 3
+        },
+        {
+            "start_timecode": "00:00:07:27",
+            "end_timecode": "00:00:09:09",
+            "transcription": "海老名から伊勢原。",
+            "scene_id": 2,
+            "scene_description": "リュックを背負った男性が駅のホームで電車を待っている様子で、電車の車内や駅の案内表示が見え、移動中の風景を捉えたスナップショットのようだ。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:32:17:53",
+            "source_filename": "GH012564.MP4",
+            "file_index": 3
+        },
+        {
+            "start_timecode": "00:00:10:16",
+            "end_timecode": "00:00:11:55",
+            "transcription": "なんか王道ルートですよね。",
+            "scene_id": 3,
+            "scene_description": "バックパックを背負った男性が、駅のホームに停車中の電車の横で、カメラに向かって話しているような様子が捉えられています。",
+            "transcription_good_reason": "Emotional",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "01:32:17:53",
+            "source_filename": "GH012564.MP4",
+            "file_index": 3
+        },
+        {
+            "start_timecode": "00:00:12:40",
+            "end_timecode": "00:00:16:19",
+            "transcription": "この総鉄線に乗るっていうのはね、毎回おなじみになってますからね。",
+            "scene_id": 3,
+            "scene_description": "バックパックを背負った男性が、駅のホームに停車中の電車の横で、カメラに向かって話しているような様子が捉えられています。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": "Repetitive",
+            "source_timecode_offset": "01:32:17:53",
+            "source_filename": "GH012564.MP4",
+            "file_index": 3
+        }
+    ]
+}
