@@ -1,103 +1,80 @@
-# 動画プレビューアプリ
+# GoPro GPSデータ可視化ツール
 
-動画、シーン、字幕データを統合的に管理・表示するWebアプリケーションです。
+## 概要
+このツールは、GoProカメラで記録したGPSデータを可視化し、分析するための統合アプリケーションです。
+PythonとNode.jsの機能を組み合わせて、GPSデータの抽出、可視化、分析を行います。
 
 ## 機能
-
-- 動画の一覧表示と選択
-- シーンと字幕の統合表示
-- フィルタリング機能
-  - シーン番号による絞り込み
-  - 説明文検索
-  - 字幕検索
-  - 評価タグによるフィルタリング
-- シーン再生機能
-- エクスポート機能（EDL、SRT形式）
-
-## システム構成
-
-- バックエンド: Flask (Python)
-- フロントエンド: Streamlit (Python)
-- データベース: SQLite
+- GPSデータの地図上での可視化
+- 高度プロファイルの表示
+- 速度プロファイルの表示
+- GPXファイルへのエクスポート
+- 基本的な統計情報の計算
 
 ## 必要条件
-
 - Python 3.8以上
+- Node.js 14以上
 - 必要なPythonパッケージ:
-  - Flask
-  - Streamlit
-  - pandas
-  - requests
-  - streamlit-option-menu
-
-## インストール方法
-
-1. リポジトリをクローン:
-```bash
-git clone [リポジトリURL]
-cd video_preview_app
-```
-
-2. 必要なパッケージをインストール:
-```bash
-pip install -r requirements.txt
-```
+  ```bash
+  pip install pandas folium matplotlib gpxpy geopy
+  ```
+- 必要なNode.jsパッケージ:
+  ```bash
+  npm install gopro-telemetry gpx-builder
+  ```
 
 ## 使用方法
 
-1. バックエンドサーバー（Flask）を起動:
+### 1. データ準備
+GoProのテレメトリーデータ（JSON形式）を用意します。
+
+### 2. スクリプト実行
 ```bash
-python app.py --base-folder [動画ファイルのベースフォルダパス] --port 5000
+python gopro_analyzer.py <telemetry_json_file>
 ```
 
-2. フロントエンド（Streamlit）を起動:
-```bash
-streamlit run streamlit_app.py
-```
+### 3. 出力ファイル
+スクリプト実行後、以下のファイルが生成されます：
 
-3. ブラウザで `http://localhost:8501` にアクセス
+- `gopro_gps_map.html`: インタラクティブな地図表示
+  - ルートの軌跡
+  - 開始点と終了点のマーカー
+  - 速度に基づくヒートマップ
+  - 1kmごとの距離マーカー
 
-## データベース構造
+- `gps_graphs.png`: グラフ表示
+  - 速度の推移
+  - 高度の推移
+  - 累積獲得標高
 
-- `videos`: 動画情報
-- `scenes`: シーン情報
-- `transcriptions`: 字幕情報
+- `output.gpx`: GPXフォーマットのトラックデータ
+  - 他のGPSアプリケーションで使用可能
 
-## APIエンドポイント
+### 4. 統計情報
+スクリプト実行時に以下の統計情報が表示されます：
+- ポイント数
+- 平均高度
+- 最高高度
+- 最低高度
+- 高度差
+- 平均速度
+- 最高速度
+- 総距離
 
-- `GET /api/videos`: 動画一覧を取得
-- `GET /api/combined_data/{video_id}`: 動画、シーン、字幕の統合データを取得
-- `GET /api/thumbnails/{scene_pk}`: サムネイル画像を取得
-- `GET /api/stream/{video_id}`: 動画をストリーミング
-- `POST /api/export/edl`: EDLファイルをエクスポート
-- `POST /api/export/srt`: SRTファイルをエクスポート
+## データ処理フロー
+1. Node.jsでGPXデータを抽出
+2. JSONファイルからGPSデータを読み込み
+3. データの前処理（異常値の除外、間引き）
+4. 統計情報の計算
+5. 地図の生成
+6. 高度プロファイルの作成
+7. 速度プロファイルの作成
 
-## 開発者向け情報
-
-### データベースの初期化
-
-```bash
-python create_database.py
-```
-
-### テスト方法
-
-```bash
-python -m pytest tests/
-```
+## 注意事項
+- 日本語フォントの表示に関する警告が表示される場合がありますが、データの処理には影響ありません
+- 大量のGPSデータがある場合は、処理に時間がかかる場合があります
+- 地図の表示にはインターネット接続が必要です
+- Node.jsがシステムにインストールされている必要があります
 
 ## ライセンス
-
 MIT License
-
-## 作者
-
-[作者名]
-
-## 貢献
-
-1. このリポジトリをフォーク
-2. 新しいブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add some amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成

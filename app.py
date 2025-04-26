@@ -385,58 +385,6 @@ def timecode_to_srt_format(timecode):
         print(f"Warning: Could not parse timecode components: {timecode}")
         return "00:00:00,000"
 
-# --- Excel Add-in Routes ---
-
-@app.route('/embedded-player')
-def embedded_player():
-    """Excel Onlineなどに埋め込むための簡易プレーヤーページ"""
-    try:
-        # templates/player.html をレンダリング
-        return render_template('player.html')
-    except Exception as e:
-        # Jinja2のTemplateNotFoundなどもここでキャッチされる
-        print(f"Error rendering player.html: {e}")
-        return jsonify({"error": "Could not load player page"}), 500
-
-@app.route('/api/player-data/<int:scene_id>')
-def player_data(scene_id):
-    """シーンIDに基づくプレーヤーデータをJSON形式で返す"""
-    conn = None
-    try:
-        conn = get_db_connection()
-        # 必要なカラムを明示的に選択
-        scene = conn.execute(
-            'SELECT id, scene_id, video_id, start_timecode, end_timecode, description, scene_evaluation_tag '
-            'FROM scenes WHERE id = ?',
-            (scene_id,)
-        ).fetchone()
-
-        if scene is None:
-            return jsonify({"error": "Scene not found"}), 404
-
-        scene_dict = dict(scene) # sqlite3.Rowを辞書に変換
-
-        # サムネイルURLを生成（サムネイルAPIを指す）
-        # API側(/api/thumbnails/<scene_id>)で存在しない場合の処理は既にある
-        thumbnail_url = f"/api/thumbnails/{scene_dict['id']}"
-
-        return jsonify({
-            "sceneId": scene_dict.get('scene_id'),
-            "videoId": scene_dict.get('video_id'),
-            "startTimecode": scene_dict.get('start_timecode'),
-            "endTimecode": scene_dict.get('end_timecode'),
-            "description": scene_dict.get('description'),
-            "evaluationTag": scene_dict.get('scene_evaluation_tag'),
-            "thumbnailUrl": thumbnail_url
-        })
-
-    except Exception as e:
-        print(f"Error fetching player data for scene {scene_id}: {e}")
-        return jsonify({"error": "Internal server error fetching player data"}), 500
-    finally:
-        if conn:
-            conn.close()
-
 # --- ★★★ 新しいエンドポイント (結合データ取得) ★★★ ---
 @app.route('/api/combined_data/<int:video_id>', methods=['GET'])
 def get_combined_data_endpoint(video_id):
