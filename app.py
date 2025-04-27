@@ -432,6 +432,23 @@ def get_combined_data_endpoint(video_id):
         if conn:
             conn.close()
 
+@app.route('/api/settings/base_folder', methods=['PUT'])
+def update_base_folder():
+    data = request.json
+    if not data or 'path' not in data:
+        return jsonify({"error": "パスが指定されていません"}), 400
+        
+    new_path = data['path']
+    if not os.path.isdir(new_path):
+        return jsonify({"error": "指定されたパスが存在しないか、フォルダではありません"}), 400
+        
+    app.config['VIDEO_BASE_FOLDER'] = os.path.abspath(new_path)
+    return jsonify({"success": True, "path": app.config['VIDEO_BASE_FOLDER']})
+
+@app.route('/api/settings/base_folder', methods=['GET'])
+def get_base_folder():
+    return jsonify({"path": app.config.get('VIDEO_BASE_FOLDER', "")})
+
 # --- Main Execution ---
 
 if __name__ == '__main__':
