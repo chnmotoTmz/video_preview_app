@@ -1,0 +1,101 @@
+{
+    "source_filepath": "E:\\100GOPRO\\GH012960.MP4",
+    "file_index": 44,
+    "extracted_audio_filepath": "E:\\100GOPRO\\GH012960.wav",
+    "metadata": {
+        "duration_seconds": 22.570667,
+        "creation_time_utc": "2016-01-01T03:38:10.000000Z",
+        "timecode_offset": "03:37:57:15"
+    },
+    "transcription_whisper_result": {
+        "text": "アンドロイドが出てきている。 あー、あれ作ってんねや、いっそ。 3Dプリンターやで、知ってる?真ん中のやつ。 ぐるぐる回ってるやつ。 あー、わかった、このコンセプトが。",
+        "segments": [
+            {
+                "start": 0.72,
+                "end": 10.59,
+                "text": "アンドロイドが出てきている。 あー、あれ作ってんねや、いっそ。"
+            },
+            {
+                "start": 12.53,
+                "end": 17.01,
+                "text": "3Dプリンターやで、知ってる?真ん中のやつ。 ぐるぐる回ってるやつ。"
+            },
+            {
+                "start": 19.34,
+                "end": 21.96,
+                "text": "あー、わかった、このコンセプトが。"
+            }
+        ],
+        "language": "ja"
+    },
+    "detected_scenes": [
+        {
+            "scene_id": 1,
+            "start_timecode": "00:00:00:00",
+            "end_timecode": "00:00:11:00",
+            "description": "展示施設らしき場所で、女性がメモを取りながら、ロボットアームや自動化された装置などが配置された様子を上から撮影したもので、木製の壁が特徴的である。",
+            "thumbnail_path": "E:\\100GOPRO\\GH012960_captures\\scene_0001.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 2,
+            "start_timecode": "00:00:11:00",
+            "end_timecode": "00:00:12:00",
+            "description": "2階の観覧スペースから、ロボットアームが作業する様子を見学できる施設内の光景で、見学者が熱心に観察している様子が捉えられている。",
+            "thumbnail_path": "E:\\100GOPRO\\GH012960_captures\\scene_0002.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        },
+        {
+            "scene_id": 3,
+            "start_timecode": "00:00:12:00",
+            "end_timecode": "00:00:22:33",
+            "description": "木材を多用した特徴的な建築空間で、見学者がロボットアームによる作業工程を見学しており、近未来的な工場や展示施設のような様子が伺える。",
+            "thumbnail_path": "E:\\100GOPRO\\GH012960_captures\\scene_0003.jpg",
+            "scene_good_reason": null,
+            "scene_bad_reason": null,
+            "scene_evaluation_tag": "Generic"
+        }
+    ],
+    "final_segments": [
+        {
+            "start_timecode": "00:00:00:43",
+            "end_timecode": "00:00:10:35",
+            "transcription": "アンドロイドが出てきている。あー、あれ作ってんねや、いっそ。",
+            "scene_id": 1,
+            "scene_description": "展示施設らしき場所で、女性がメモを取りながら、ロボットアームや自動化された装置などが配置された様子を上から撮影したもので、木製の壁が特徴的である。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": "Filler",
+            "source_timecode_offset": "03:37:57:15",
+            "source_filename": "GH012960.MP4",
+            "file_index": 44
+        },
+        {
+            "start_timecode": "00:00:12:31",
+            "end_timecode": "00:00:17:00",
+            "transcription": "3Dプリンターやで、知ってる?真ん中のやつ。ぐるぐる回ってるやつ。",
+            "scene_id": 3,
+            "scene_description": "木材を多用した特徴的な建築空間で、見学者がロボットアームによる作業工程を見学しており、近未来的な工場や展示施設のような様子が伺える。",
+            "transcription_good_reason": "Descriptive",
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "03:37:57:15",
+            "source_filename": "GH012960.MP4",
+            "file_index": 44
+        },
+        {
+            "start_timecode": "00:00:19:20",
+            "end_timecode": "00:00:21:57",
+            "transcription": "あー、わかった、このコンセプトが。",
+            "scene_id": 3,
+            "scene_description": "木材を多用した特徴的な建築空間で、見学者がロボットアームによる作業工程を見学しており、近未来的な工場や展示施設のような様子が伺える。",
+            "transcription_good_reason": null,
+            "transcription_bad_reason": null,
+            "source_timecode_offset": "03:37:57:15",
+            "source_filename": "GH012960.MP4",
+            "file_index": 44
+        }
+    ]
+}

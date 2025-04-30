@@ -7,6 +7,15 @@ import sqlite3
 import glob
 from pathlib import Path
 from datetime import datetime
+import argparse
+import logging
+
+# ロギングの設定
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 class VideoDatabase:
     def __init__(self, db_path):
@@ -48,13 +57,14 @@ class VideoDatabase:
         self.cursor.execute('''
         CREATE TABLE IF NOT EXISTS videos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            filename TEXT UNIQUE,
-            filepath TEXT,
+            filename TEXT NOT NULL,
+            filepath TEXT NOT NULL,
             file_index INTEGER,
             duration_seconds REAL,
             creation_time TEXT,
-            timecode_offset TEXT,
-            imported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            timecode_offset TEXT DEFAULT '00:00:00:00',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         ''')
         
@@ -73,16 +83,18 @@ class VideoDatabase:
         self.cursor.execute('''
         CREATE TABLE IF NOT EXISTS scenes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            video_id INTEGER,
-            scene_id INTEGER,
-            start_timecode TEXT,
-            end_timecode TEXT,
+            video_id INTEGER NOT NULL,
+            scene_id INTEGER NOT NULL,
+            start_timecode TEXT NOT NULL,
+            end_timecode TEXT NOT NULL,
             description TEXT,
             thumbnail_path TEXT,
             scene_good_reason TEXT,
             scene_bad_reason TEXT,
-            scene_evaluation_tag TEXT,
-            FOREIGN KEY (video_id) REFERENCES videos (id)
+            evaluation_tag TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
         )
         ''')
         
@@ -90,22 +102,57 @@ class VideoDatabase:
         self.cursor.execute('''
         CREATE TABLE IF NOT EXISTS transcriptions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            video_id INTEGER,
-            start_timecode TEXT,
-            end_timecode TEXT,
-            transcription TEXT,
-            scene_id INTEGER,
+            video_id INTEGER NOT NULL,
+            scene_id INTEGER NOT NULL,
+            start_timecode TEXT NOT NULL,
+            end_timecode TEXT NOT NULL,
+            transcription TEXT NOT NULL,
             transcription_good_reason TEXT,
             transcription_bad_reason TEXT,
             source_timecode_offset TEXT,
             source_filename TEXT,
             file_index INTEGER,
-            FOREIGN KEY (video_id) REFERENCES videos (id),
-            FOREIGN KEY (scene_id) REFERENCES scenes (id)
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE,
+            FOREIGN KEY (scene_id) REFERENCES scenes(id) ON DELETE CASCADE
         )
         ''')
         
+        # インデックスの作成
+        self.cursor.execute('CREATE INDEX IF NOT EXISTS idx_videos_filename ON videos (filename)')
+        self.cursor.execute('CREATE INDEX IF NOT EXISTS idx_scenes_video_id ON scenes (video_id)')
+        self.cursor.execute('CREATE INDEX IF NOT EXISTS idx_scenes_scene_id ON scenes (scene_id)')
+        self.cursor.execute('CREATE INDEX IF NOT EXISTS idx_transcriptions_video_id ON transcriptions (video_id)')
+        self.cursor.execute('CREATE INDEX IF NOT EXISTS idx_transcriptions_scene_id ON transcriptions (scene_id)')
+        
+        # トリガーの作成（updated_atの自動更新用）
+        self.cursor.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_videos_timestamp 
+        AFTER UPDATE ON videos
+        BEGIN
+            UPDATE videos SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+        END;
+        ''')
+
+        self.cursor.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_scenes_timestamp 
+        AFTER UPDATE ON scenes
+        BEGIN
+            UPDATE scenes SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+        END;
+        ''')
+
+        self.cursor.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_transcriptions_timestamp 
+        AFTER UPDATE ON transcriptions
+        BEGIN
+            UPDATE transcriptions SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+        END;
+        ''')
+        
         self.conn.commit()
+        print(f"データベース '{self.db_path}' が正常に作成されました。")
 
     def parse_timecode(self, timecode):
         """タイムコードを秒数に変換"""
@@ -308,7 +355,7 @@ class VideoDatabase:
                                     thumbnail_path,
                                     scene_good_reason,
                                     scene_bad_reason,
-                                    scene_evaluation_tag
+                                    evaluation_tag
                                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                                 ''', (
                                     video_id,
@@ -395,98 +442,130 @@ class VideoDatabase:
             traceback.print_exc()
             return count, errors
 
+def init_db(db_path: str):
+    """データベースを初期化し、必要なテーブルを作成する"""
+    try:
+        # データベースが既に存在する場合はバックアップを作成
+        if os.path.exists(db_path):
+            backup_path = f"{db_path}.backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            os.rename(db_path, backup_path)
+            logger.info(f"既存のデータベースをバックアップしました: {backup_path}")
+
+        # 新しいデータベース接続を作成
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        # videosテーブルの作成
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS videos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            filename TEXT NOT NULL,
+            filepath TEXT NOT NULL,
+            file_index INTEGER,
+            duration_seconds REAL,
+            creation_time TEXT,
+            timecode_offset TEXT DEFAULT '00:00:00:00',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        ''')
+
+        # scenesテーブルの作成
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS scenes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            video_id INTEGER NOT NULL,
+            scene_id INTEGER NOT NULL,
+            start_timecode TEXT NOT NULL,
+            end_timecode TEXT NOT NULL,
+            description TEXT,
+            thumbnail_path TEXT,
+            scene_good_reason TEXT,
+            scene_bad_reason TEXT,
+            evaluation_tag TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
+        )
+        ''')
+
+        # transcriptionsテーブルの作成
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS transcriptions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            video_id INTEGER NOT NULL,
+            scene_id INTEGER NOT NULL,
+            start_timecode TEXT NOT NULL,
+            end_timecode TEXT NOT NULL,
+            transcription TEXT NOT NULL,
+            transcription_good_reason TEXT,
+            transcription_bad_reason TEXT,
+            source_timecode_offset TEXT,
+            source_filename TEXT,
+            file_index INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE,
+            FOREIGN KEY (scene_id) REFERENCES scenes(id) ON DELETE CASCADE
+        )
+        ''')
+
+        # インデックスの作成
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_videos_filename ON videos(filename)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_scenes_video_id ON scenes(video_id)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_scenes_scene_id ON scenes(scene_id)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_transcriptions_video_id ON transcriptions(video_id)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_transcriptions_scene_id ON transcriptions(scene_id)')
+
+        # トリガーの作成（updated_atの自動更新用）
+        cursor.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_videos_timestamp 
+        AFTER UPDATE ON videos
+        BEGIN
+            UPDATE videos SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+        END;
+        ''')
+
+        cursor.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_scenes_timestamp 
+        AFTER UPDATE ON scenes
+        BEGIN
+            UPDATE scenes SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+        END;
+        ''')
+
+        cursor.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_transcriptions_timestamp 
+        AFTER UPDATE ON transcriptions
+        BEGIN
+            UPDATE transcriptions SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+        END;
+        ''')
+
+        conn.commit()
+        logger.info(f"データベース {db_path} を正常に初期化しました")
+
+    except sqlite3.Error as e:
+        logger.error(f"データベース初期化中にエラーが発生しました: {e}")
+        raise
+    finally:
+        if conn:
+            conn.close()
+
 def main():
-    """
-    テスト用のメイン関数
-    """
-    import argparse
-    import sys
-    
-    parser = argparse.ArgumentParser(description='動画データベースを作成し、TSデータをインポートします')
-    parser.add_argument('--db', default='test.db', help='データベースファイルのパス')
-    parser.add_argument('--dir', required=True, help='TSデータを含むディレクトリのパス')
-    parser.add_argument('--test', action='store_true', help='テストモードで実行')
-    parser.add_argument('--init', action='store_true', help='データベースを初期化してからインポート')
-    
+    """メイン実行関数"""
+    parser = argparse.ArgumentParser(description='データベース初期化スクリプト')
+    parser.add_argument('--db', default='video_data.db',
+                      help='作成するSQLiteデータベースファイルのパス (デフォルト: video_data.db)')
+
     args = parser.parse_args()
     
-    # データベース接続
-    db = VideoDatabase(args.db)
-    db.connect()
-    
     try:
-        if args.init:
-            print("データベースを初期化します...")
-            db.create_schema()
-            print("初期化完了")
-        
-        # TSデータのインポート
-        count, errors = db.import_ts_data(args.dir)
-        
-        # 結果の表示
-        print(f"インポート完了: {count}件の動画を処理")
-        if errors:
-            print("\nエラー一覧:")
-            for error in errors:
-                print(f"- {error}")
-        
-        # テストモードの場合、データの検証を行う
-        if args.test:
-            print("\n=== テスト結果 ===")
-            
-            # テストデータの検証
-            test_video = "GH012564.MP4"
-            print(f"\n動画ファイル: {test_video}")
-            
-            # 動画IDを取得
-            db.cursor.execute("SELECT id FROM videos WHERE filename = ?", (test_video,))
-            video_id_result = db.cursor.fetchone()
-            if not video_id_result:
-                print("エラー: テスト動画が見つかりません")
-                sys.exit(1)
-            video_id = video_id_result[0]
-            
-            # シーンデータの検証
-            print("\nシーンデータの検証:")
-            db.cursor.execute('''
-            SELECT scene_id, scene_good_reason, scene_bad_reason, scene_evaluation_tag 
-            FROM scenes 
-            WHERE video_id = ?
-            ORDER BY scene_id
-            ''', (video_id,))
-            
-            scenes = db.cursor.fetchall()
-            if not scenes:
-                print("エラー: シーンデータが見つかりません")
-            else:
-                for scene in scenes:
-                    print(f"\nシーンID: {scene[0]}")
-                    print(f"- 良い理由: {scene[1]}")
-                    print(f"- 悪い理由: {scene[2]}")
-                    print(f"- 評価タグ: {scene[3]}")
-            
-            # 文字起こしデータの検証
-            print("\n文字起こしデータの検証:")
-            db.cursor.execute('''
-            SELECT start_timecode, end_timecode, transcription, 
-                   transcription_good_reason, transcription_bad_reason 
-            FROM transcriptions 
-            WHERE video_id = ?
-            ORDER BY start_timecode
-            ''', (video_id,))
-            
-            transcriptions = db.cursor.fetchall()
-            if not transcriptions:
-                print("エラー: 文字起こしデータが見つかりません")
-            else:
-                for trans in transcriptions:
-                    print(f"\n時間: {trans[0]} - {trans[1]}")
-                    print(f"文字起こし: {trans[2]}")
-                    print(f"- 良い理由: {trans[3]}")
-                    print(f"- 悪い理由: {trans[4]}")
-    
-    finally:
-        db.close()
+        init_db(args.db)
+        logger.info("データベースの初期化が完了しました")
+    except Exception as e:
+        logger.error(f"エラーが発生しました: {e}")
+        exit(1)
 
 if __name__ == "__main__":
     main()
