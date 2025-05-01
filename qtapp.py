@@ -15,7 +15,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtCore import Qt, QUrl, QThread, pyqtSignal, QAbstractTableModel, QModelIndex, QTimer, QMetaObject, pyqtSlot, QItemSelectionModel
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIntValidator, QDoubleValidator
 import vlc
 
 # --- API Base URL ---
