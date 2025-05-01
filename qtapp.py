@@ -8,7 +8,9 @@ from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QLabel, QLineEdit, QTableView, QHeaderView,
     QDockWidget, QGroupBox, QScrollArea, QMessageBox, QFileDialog,
-    QAbstractItemView, QSplitter, QAction, QStatusBar, QProgressBar
+    QAbstractItemView, QSplitter, QAction, QStatusBar, QProgressBar,
+    QComboBox, QDialog, QFormLayout, QDialogButtonBox, QTabWidget,
+    QTextEdit
 )
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -94,6 +96,121 @@ class ApiWorker(QThread):
             self.error_occurred.emit(f"APIリクエストエラー ({self.endpoint}): {e}")
         except Exception as e:
             self.error_occurred.emit(f"データ取得中にエラーが発生しました ({self.endpoint}): {e}")
+
+# --- EditablePandasModel for Database Editor ---
+class EditablePandasModel(QAbstractTableModel):
+    """編集可能なPandas DataFrameモデル"""
+    dataChanged = pyqtSignal(QModelIndex, QModelIndex)
+    
+    def __init__(self, data):
+        super().__init__()
+        self._data = data
+        self._original_data = data.copy()
+        self._editable_cols = None  # すべての列を編集可能にする場合はNone
+        self._modified_rows = set()  # 変更された行のインデックス
+        
+    def rowCount(self, parent=QModelIndex()):
+        return self._data.shape[0]
+    
+    def columnCount(self, parent=QModelIndex()):
+        return self._data.shape[1]
+    
+    def data(self, index, role=Qt.DisplayRole):
+        if index.isValid():
+            if role == Qt.DisplayRole or role == Qt.EditRole:
+                value = self._data.iloc[index.row(), index.column()]
+                return str(value) if value is not None else ""
+            elif role == Qt.BackgroundRole:
+                # 変更された行の背景色を変更
+                if index.row() in self._modified_rows:
+                    return Qt.yellow
+        return None
+    
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return self._data.columns[section]
+        if orientation == Qt.Vertical and role == Qt.DisplayRole:
+            return str(self._data.index[section])
+        return None
+    
+    def setData(self, index, value, role):
+        if role == Qt.EditRole and index.isValid():
+            row, col = index.row(), index.column()
+            col_name = self._data.columns[col]
+            
+            # IDカラムは編集不可
+            if col_name == 'id':
+                return False
+            
+            # 空の文字列はNoneとして扱う（SQLiteでNULLにするため）
+            if value == "":
+                value = None
+            
+            # 値が変更された場合のみ更新
+            current_value = self._data.iloc[row, col]
+            if str(current_value) != str(value):
+                self._data.iloc[row, col] = value
+                self._modified_rows.add(row)
+                self.dataChanged.emit(index, index)
+                return True
+        return False
+    
+    def flags(self, index):
+        if not index.isValid():
+            return Qt.ItemIsEnabled
+            
+        col_name = self._data.columns[index.column()]
+        
+        # IDカラムは編集不可
+        if col_name == 'id':
+            return Qt.ItemIsEnabled | Qt.ItemIsSelectable
+            
+        # 特定の列のみ編集可能にする場合
+        if self._editable_cols is not None and col_name not in self._editable_cols:
+            return Qt.ItemIsEnabled | Qt.ItemIsSelectable
+            
+        return Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable
+    
+    def set_editable_columns(self, column_names):
+        """編集可能な列を設定"""
+        self._editable_cols = column_names
+    
+    def update_data(self, new_data):
+        """データを更新"""
+        self.beginResetModel()
+        self._data = new_data
+        self._original_data = new_data.copy()
+        self._modified_rows = set()  # 変更履歴をリセット
+        self.endResetModel()
+    
+    def get_modified_rows(self):
+        """変更された行のデータを取得"""
+        if not self._modified_rows:
+            return pd.DataFrame()
+        return self._data.iloc[list(self._modified_rows)].copy()
+    
+    def reset_changes(self):
+        """変更をリセット"""
+        self.beginResetModel()
+        self._data = self._original_data.copy()
+        self._modified_rows = set()
+        self.endResetModel()
+    
+    def save_changes(self):
+        """変更を確定"""
+        self._original_data = self._data.copy()
+        self._modified_rows = set()
+    
+    def sort(self, column, order):
+        colname = self._data.columns[column]
+        ascending = order == Qt.AscendingOrder
+        self.layoutAboutToBeChanged.emit()
+        try:
+            self._data.sort_values(by=colname, ascending=ascending, inplace=True, kind='mergesort')
+            self._data.reset_index(drop=True, inplace=True)
+        except Exception as e:
+            print(f"Sort error: {e}")
+        self.layoutChanged.emit()
 
 # --- VLCPlayerWidget ---
 class VLCPlayerWidget(QWidget):
@@ -221,6 +338,364 @@ def seconds_to_timecode(total_seconds, frame_rate=60.0): # EDLは60fpsに変更
     except Exception:
         return "00:00:00:00"
 
+# --- DatabaseEditorWindow ---
+class DatabaseEditorWindow(QDialog):
+    """データベーステーブル編集用ダイアログ"""
+    
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("データベース編集")
+        self.setGeometry(100, 100, 1000, 600)
+        self.setModal(False)  # モーダルでないダイアログとして表示
+        self.api_worker = None
+        self.current_table = None
+        self.table_structure = {}
+        self.field_info = {}
+        
+        self._init_ui()
+        self._connect_signals()
+        self._load_tables()
+        
+    def _init_ui(self):
+        main_layout = QVBoxLayout(self)
+        
+        # テーブル選択エリア
+        table_select_layout = QHBoxLayout()
+        table_select_layout.addWidget(QLabel("テーブル:"))
+        self.table_combo = QComboBox()
+        table_select_layout.addWidget(self.table_combo)
+        self.refresh_button = QPushButton("更新")
+        table_select_layout.addWidget(self.refresh_button)
+        table_select_layout.addStretch()
+        main_layout.addLayout(table_select_layout)
+        
+        # 検索エリア
+        search_layout = QHBoxLayout()
+        search_layout.addWidget(QLabel("検索:"))
+        self.search_input = QLineEdit()
+        search_layout.addWidget(self.search_input)
+        search_layout.addStretch()
+        main_layout.addLayout(search_layout)
+        
+        # データテーブル
+        self.data_table = QTableView()
+        self.data_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.data_table.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.data_table.setSortingEnabled(True)
+        self.table_model = EditablePandasModel(pd.DataFrame())
+        self.data_table.setModel(self.table_model)
+        self.data_table.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
+        main_layout.addWidget(self.data_table)
+        
+        # ボタンエリア
+        button_layout = QHBoxLayout()
+        self.save_button = QPushButton("保存")
+        self.reset_button = QPushButton("リセット")
+        button_layout.addWidget(self.save_button)
+        button_layout.addWidget(self.reset_button)
+        button_layout.addStretch()
+        main_layout.addLayout(button_layout)
+        
+        # ステータスラベル
+        self.status_label = QLabel("")
+        main_layout.addWidget(self.status_label)
+        
+    def _connect_signals(self):
+        self.table_combo.currentIndexChanged.connect(self._on_table_selected)
+        self.refresh_button.clicked.connect(self._load_tables)
+        self.search_input.textChanged.connect(self._filter_data)
+        self.save_button.clicked.connect(self._save_changes)
+        self.reset_button.clicked.connect(self._reset_changes)
+        self.data_table.doubleClicked.connect(self._edit_record)
+        
+    def _load_tables(self):
+        """利用可能なテーブル一覧を読み込み"""
+        self.status_label.setText("テーブル一覧を読み込み中...")
+        self.api_worker = ApiWorker("mcp/tables")
+        self.api_worker.data_ready.connect(self._on_tables_loaded)
+        self.api_worker.error_occurred.connect(self._on_api_error)
+        self.api_worker.start()
+        
+    def _on_tables_loaded(self, data):
+        """テーブル一覧が読み込まれた時の処理"""
+        try:
+            self.table_combo.clear()
+            for table in data:
+                self.table_combo.addItem(f"{table['name']} - {table['description']}", table['name'])
+            self.status_label.setText("テーブル一覧を読み込みました")
+        except Exception as e:
+            self._on_api_error(f"テーブル一覧の処理中にエラーが発生しました: {e}")
+        finally:
+            self.api_worker = None
+            
+    def _on_table_selected(self, index):
+        """テーブルが選択された時の処理"""
+        if index < 0:
+            return
+            
+        table_name = self.table_combo.currentData()
+        self.current_table = table_name
+        self.status_label.setText(f"{table_name}テーブルのデータを読み込み中...")
+        
+        # テーブルのフィールド情報を取得
+        self.api_worker = ApiWorker(f"{table_name}_fields")
+        self.api_worker.data_ready.connect(lambda data: self._on_fields_loaded(data, table_name))
+        self.api_worker.error_occurred.connect(self._on_api_error)
+        self.api_worker.start()
+    
+    def _on_fields_loaded(self, field_data, table_name):
+        """フィールド情報が読み込まれた時の処理"""
+        try:
+            self.field_info[table_name] = field_data
+            
+            # テーブルのレコードを取得
+            self.api_worker = ApiWorker(f"mcp/records/{table_name}")
+            self.api_worker.data_ready.connect(self._on_records_loaded)
+            self.api_worker.error_occurred.connect(self._on_api_error)
+            self.api_worker.start()
+        except Exception as e:
+            self._on_api_error(f"フィールド情報の処理中にエラーが発生しました: {e}")
+        finally:
+            self.api_worker = None
+    
+    def _on_records_loaded(self, data):
+        """レコードが読み込まれた時の処理"""
+        try:
+            records = data.get('records', [])
+            if records:
+                df = pd.DataFrame(records)
+                self.table_model.update_data(df)
+                self.data_table.resizeColumnsToContents()
+                self.status_label.setText(f"{len(records)}件のレコードを読み込みました")
+            else:
+                self.table_model.update_data(pd.DataFrame())
+                self.status_label.setText("レコードがありません")
+        except Exception as e:
+            self._on_api_error(f"レコードの処理中にエラーが発生しました: {e}")
+        finally:
+            self.api_worker = None
+    
+    def _on_api_error(self, error_message):
+        """API実行中にエラーが発生した時の処理"""
+        QMessageBox.critical(self, "APIエラー", error_message)
+        self.status_label.setText(f"エラー: {error_message}")
+        self.api_worker = None
+    
+    def _filter_data(self):
+        """検索条件に基づいてデータをフィルタリング"""
+        # TODO: 実装
+        pass
+    
+    def _edit_record(self, index):
+        """レコード編集ダイアログを表示"""
+        row = index.row()
+        if row < 0:
+            return
+            
+        record_id = self.table_model._data.iloc[row]['id']
+        record_data = self.table_model._data.iloc[row].to_dict()
+        
+        dialog = RecordEditorDialog(self.current_table, record_id, record_data, self.field_info.get(self.current_table, {}), self)
+        if dialog.exec_() == QDialog.Accepted:
+            updated_data = dialog.get_updated_data()
+            for col, value in updated_data.items():
+                if col in self.table_model._data.columns:
+                    col_idx = self.table_model._data.columns.get_loc(col)
+                    model_index = self.table_model.index(row, col_idx)
+                    self.table_model.setData(model_index, value, Qt.EditRole)
+    
+    def _save_changes(self):
+        """変更を保存"""
+        modified_df = self.table_model.get_modified_rows()
+        if modified_df.empty:
+            QMessageBox.information(self, "保存", "変更はありません")
+            return
+            
+        # 確認ダイアログ
+        reply = QMessageBox.question(
+            self, "保存確認", 
+            f"{len(modified_df)}件のレコードを更新します。よろしいですか？",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+        )
+        
+        if reply == QMessageBox.No:
+            return
+            
+        # 各レコードを順次APIで更新
+        success_count = 0
+        error_count = 0
+        error_messages = []
+        
+        self.status_label.setText("変更を保存中...")
+        for idx, row in modified_df.iterrows():
+            record_id = row['id']
+            # idフィールドを除外
+            update_data = {k: v for k, v in row.items() if k != 'id'}
+            
+            try:
+                url = f"{API_BASE_URL}/{self.current_table}s/{record_id}"
+                response = requests.put(url, json=update_data)
+                response.raise_for_status()
+                success_count += 1
+            except Exception as e:
+                error_count += 1
+                error_messages.append(f"ID {record_id}: {str(e)}")
+                if error_count >= 3:  # エラーが多すぎる場合は中断
+                    break
+        
+        # 結果をユーザーに表示
+        if error_count > 0:
+            error_detail = "\n".join(error_messages[:3])
+            if len(error_messages) > 3:
+                error_detail += f"\n...他 {len(error_messages) - 3} 件のエラー"
+            QMessageBox.warning(
+                self, "保存結果", 
+                f"{success_count}件の更新に成功、{error_count}件の更新に失敗しました。\n\nエラー:\n{error_detail}"
+            )
+        else:
+            QMessageBox.information(self, "保存成功", f"{success_count}件のレコードを更新しました")
+            self.table_model.save_changes()
+            
+        self.status_label.setText(f"{success_count}件更新、{error_count}件失敗")
+    
+    def _reset_changes(self):
+        """変更をリセット"""
+        modified_df = self.table_model.get_modified_rows()
+        if modified_df.empty:
+            return
+            
+        reply = QMessageBox.question(
+            self, "変更破棄", 
+            f"{len(modified_df)}件の変更を破棄します。よろしいですか？",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            self.table_model.reset_changes()
+            self.status_label.setText("変更を破棄しました")
+
+
+class RecordEditorDialog(QDialog):
+    """レコード編集用ダイアログ"""
+    
+    def __init__(self, table_name, record_id, record_data, field_info, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(f"{table_name} レコード編集 - ID: {record_id}")
+        self.setMinimumWidth(500)
+        self.table_name = table_name
+        self.record_id = record_id
+        self.record_data = record_data.copy()
+        self.field_info = field_info
+        self.updated_data = {}
+        
+        self._init_ui()
+    
+    def _init_ui(self):
+        layout = QVBoxLayout(self)
+        
+        # タブウィジェット
+        self.tab_widget = QTabWidget()
+        
+        # 基本編集タブ
+        basic_tab = QWidget()
+        basic_layout = QFormLayout(basic_tab)
+        
+        self.field_widgets = {}
+        
+        # IDフィールドは編集不可として表示
+        id_label = QLabel(f"ID: {self.record_id}")
+        basic_layout.addRow("", id_label)
+        
+        # フィールド情報がある場合は、それを使用してフィールドの説明を表示
+        for field, value in self.record_data.items():
+            if field == 'id':  # IDはすでに表示済み
+                continue
+                
+            field_desc = field
+            field_type = "string"
+            
+            if field in self.field_info:
+                field_info = self.field_info[field]
+                field_desc = field_info.get('description', field)
+                field_type = field_info.get('type', 'string')
+            
+            # フィールドの値入力ウィジェット
+            if field_type == 'integer':
+                widget = QLineEdit(str(value) if value is not None else "")
+                widget.setValidator(QIntValidator())
+            elif field_type == 'number':
+                widget = QLineEdit(str(value) if value is not None else "")
+                widget.setValidator(QDoubleValidator())
+            else:  # string
+                if len(str(value)) > 100 or (value is not None and '\n' in str(value)):
+                    widget = QTextEdit()
+                    widget.setText(str(value) if value is not None else "")
+                    widget.setMinimumHeight(100)
+                else:
+                    widget = QLineEdit(str(value) if value is not None else "")
+            
+            self.field_widgets[field] = widget
+            basic_layout.addRow(f"{field_desc}:", widget)
+        
+        self.tab_widget.addTab(basic_tab, "基本情報")
+        layout.addWidget(self.tab_widget)
+        
+        # JSONビュータブなどの追加タブ（必要に応じて）
+        # ...
+        
+        # ボタン
+        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box.accepted.connect(self.accept)
+        button_box.rejected.connect(self.reject)
+        layout.addWidget(button_box)
+    
+    def accept(self):
+        """OKボタンが押された時の処理"""
+        # 変更内容を収集
+        for field, widget in self.field_widgets.items():
+            original_value = self.record_data.get(field)
+            
+            if isinstance(widget, QTextEdit):
+                new_value = widget.toPlainText()
+            elif isinstance(widget, QLineEdit):
+                new_value = widget.text()
+            else:
+                continue
+            
+            # 空の文字列はNoneとして処理
+            if new_value == "":
+                new_value = None
+                
+            # 数値フィールドの場合は型変換
+            if field in self.field_info:
+                field_type = self.field_info[field].get('type')
+                if field_type == 'integer' and new_value is not None:
+                    try:
+                        new_value = int(new_value)
+                    except ValueError:
+                        pass
+                elif field_type == 'number' and new_value is not None:
+                    try:
+                        new_value = float(new_value)
+                    except ValueError:
+                        pass
+            
+            # 値が変更された場合のみ記録
+            if str(original_value) != str(new_value):
+                self.updated_data[field] = new_value
+        
+        # 変更がない場合
+        if not self.updated_data:
+            QMessageBox.information(self, "変更なし", "変更はありませんでした")
+            super().accept()
+            return
+            
+        super().accept()
+    
+    def get_updated_data(self):
+        """更新されたデータを取得"""
+        return self.updated_data
+
 # --- Main Application Window ---
 class VideoPreviewApp(QMainWindow):
     play_next_signal = pyqtSignal(int)
@@ -241,6 +716,9 @@ class VideoPreviewApp(QMainWindow):
         self._load_initial_data()
         self.play_next_signal.connect(self._play_scene_by_index)
         # VLCイベントハンドラ登録はVLCPlayerWidget側で行う
+        
+        # データベース編集ダイアログ
+        self.db_editor = None
 
     def _load_base_folder(self):
         try:
@@ -253,6 +731,14 @@ class VideoPreviewApp(QMainWindow):
             self.base_folder = ""
 
     def _init_ui(self):
+        # --- Menubar ---
+        menubar = self.menuBar()
+        tools_menu = menubar.addMenu('ツール')
+        
+        db_edit_action = QAction('データベース編集', self)
+        db_edit_action.triggered.connect(self._open_db_editor)
+        tools_menu.addAction(db_edit_action)
+        
         # --- Central Widget ---
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
@@ -580,141 +1066,57 @@ class VideoPreviewApp(QMainWindow):
             return
 
         # 1. CSVデータを生成
+        scene_pks_to_export = selected_data['シーンPK'].dropna().astype(int).unique().tolist()
+
+        if not scene_pks_to_export:
+            QMessageBox.warning(self, "エクスポートエラー", "選択された行に有効なシーンPKが見つかりません。")
+            return
+
+        # --- CSV Export (Local generation) ---
         if format == 'CSV':
             filename, _ = QFileDialog.getSaveFileName(self, "CSVファイルを保存", "", "CSV Files (*.csv)")
             if filename:
                 try:
                     selected_data.to_csv(filename, index=False, encoding='utf-8-sig')
                     self.status_bar.showMessage(f"CSVファイルを保存しました: {filename}", 5000)
+                    QMessageBox.information(self, "CSV保存完了", f"CSVファイルを保存しました:\n{filename}")
                 except Exception as e:
                     QMessageBox.critical(self, "CSV保存エラー", f"ファイルの保存中にエラーが発生しました: {e}")
             return
 
-        # 選択されたデータを基にEDLとSRTを生成
-        # 必要な列を準備
-        required_cols = ['シーンPK', '動画ファイル', '開始TC', '終了TC', '字幕']
-        missing_cols = [col for col in required_cols if col not in selected_data.columns]
-        if missing_cols:
-            QMessageBox.warning(self, "エクスポートエラー", f"必要な列が見つかりません: {', '.join(missing_cols)}")
-            return
+        # --- EDL/SRT Export (API call) ---
+        default_filename = f"export.{format.lower()}"
+        file_filter = f"{format.upper()} Files (*.{format.lower()});;All Files (*)"
+        filename, _ = QFileDialog.getSaveFileName(self, f"{format.upper()}ファイルを保存", default_filename, file_filter)
 
-        # EDL生成用のデータ準備
-        # 必要な情報を選択
-        edl_data = selected_data[['シーンPK', '動画ファイル', '開始TC', '終了TC']].copy()
-        edl_data['duration'] = edl_data.apply(
-            lambda row: timecode_to_seconds(row['終了TC']) - timecode_to_seconds(row['開始TC']),
-            axis=1
-        )
+        if filename:
+            try:
+                self.status_bar.showMessage(f"{format.upper()}ファイルを生成中...")
+                payload = {'scene_pks': scene_pks_to_export, 'format': format}
+                response = requests.post(f"{API_BASE_URL}/export/combined", json=payload, timeout=60, stream=True)
+                response.raise_for_status()
 
-        # 2. EDLデータを生成
-        edl_content = "TITLE: Video Preprocessing Export\n"
-        edl_content += "FCM: NON-DROP FRAME\n\n"
-        record_start_seconds = 0.0
-        edl_frame_rate = 60.0  # EDLも60fpsで出力するように変更
-        source_frame_rate = 60.0
-        video_record_offsets = {}  # 動画ファイル -> レコードINタイムコード（秒）
+                # ファイルに書き込み
+                with open(filename, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
 
-        for i, row in edl_data.iterrows():
-            event_num = f"{i + 1:03d}"
-            reel_name = os.path.splitext(row['動画ファイル'])[0][:8].upper()
-            track_type = "V"
-            edit_type = "C"
+                self.status_bar.showMessage(f"{format.upper()}ファイルを保存しました: {filename}", 5000)
+                QMessageBox.information(self, f"{format.upper()}保存完了", f"{format.upper()}ファイルを保存しました:\n{filename}")
 
-            # ソースタイムコード（オフセットは適用しない、ゼロスタート）
-            source_start_sec = timecode_to_seconds(row['開始TC'], source_frame_rate)
-            source_end_sec = timecode_to_seconds(row['終了TC'], source_frame_rate)
-            source_in_tc = seconds_to_timecode(source_start_sec, edl_frame_rate)
-            source_out_tc = seconds_to_timecode(source_end_sec, edl_frame_rate)
-
-            # 継続時間を計算
-            source_duration_sec = max(0.0, source_end_sec - source_start_sec)
-            if source_duration_sec < 1.0 / source_frame_rate:
-                source_end_sec = source_start_sec + (1.0 / source_frame_rate)
-                source_out_tc = seconds_to_timecode(source_end_sec, edl_frame_rate)
-                source_duration_sec = 1.0 / source_frame_rate
-
-            # レコードタイムコード
-            record_in_sec = record_start_seconds
-            record_out_sec = record_start_seconds + source_duration_sec
-            record_in_tc = seconds_to_timecode(record_in_sec, edl_frame_rate)
-            record_out_tc = seconds_to_timecode(record_out_sec, edl_frame_rate)
-
-            # 動画ファイルごとにレコードINタイムコードを保存
-            video_record_offsets[row['動画ファイル']] = record_in_sec
-
-            # EDL行を生成
-            edl_content += f"{event_num}  {reel_name:<8} {track_type}     {edit_type}        {source_in_tc} {source_out_tc} {record_in_tc} {record_out_tc}\n"
-            edl_content += f"* FROM CLIP NAME: {row['動画ファイル']}\n\n"
-
-            record_start_seconds = record_out_sec
-
-        # EDLファイルの保存
-        if format == 'EDL':
-            filename, _ = QFileDialog.getSaveFileName(self, "EDLファイルを保存", "export.edl", "EDL Files (*.edl);;All Files (*)")
-            if filename:
+            except requests.exceptions.RequestException as e:
+                error_detail = ""
                 try:
-                    with open(filename, 'w', encoding='utf-8') as f:
-                        f.write(edl_content)
-                    self.status_bar.showMessage(f"EDLファイルを保存しました: {filename}", 5000)
-                except Exception as e:
-                    QMessageBox.critical(self, "EDL保存エラー", f"ファイルの保存中にエラーが発生しました: {e}")
-            return
-
-        # 3. CSVデータを生成（文字列として）
-        csv_buffer = StringIO()
-        selected_data.to_csv(csv_buffer, index=False, encoding='utf-8')
-        csv_content = csv_buffer.getvalue()
-        csv_buffer.close()
-
-        # 4. CSVデータをパース
-        csv_reader = csv.DictReader(StringIO(csv_content))
-        subtitles = []
-        for row in csv_reader:
-            if '字幕' in row and row['字幕'] and row['字幕'] != 'nan':  # 字幕が空でない場合のみ
-                subtitles.append({
-                    '動画ファイル': row['動画ファイル'],
-                    'start_timecode': row['開始TC'],
-                    'end_timecode': row['終了TC'],
-                    'transcription': row['字幕']
-                })
-
-        # 字幕をソート（動画ファイル順、開始TC順）
-        subtitles.sort(key=lambda x: (x['動画ファイル'], timecode_to_seconds(x['start_timecode'])))
-
-        # 5. SRTデータを生成
-        srt_content = ""
-        for i, subtitle in enumerate(subtitles):
-            filename = subtitle['動画ファイル']
-            # レコードINタイムコードをオフセットとして取得
-            record_offset_sec = video_record_offsets.get(filename, 0.0)
-
-            # 字幕の開始・終了時間を取得（ゼロスタート）
-            start_sec = timecode_to_seconds(subtitle['start_timecode'], source_frame_rate)
-            end_sec = timecode_to_seconds(subtitle['end_timecode'], source_frame_rate)
-
-            # オフセットを適用
-            adjusted_start_sec = start_sec + record_offset_sec
-            adjusted_end_sec = end_sec + record_offset_sec
-
-            # SRT形式に変換
-            start_srt = seconds_to_srt_timecode(adjusted_start_sec)
-            end_srt = seconds_to_srt_timecode(adjusted_end_sec)
-            text = subtitle['transcription']
-
-            srt_content += f"{i + 1}\n"
-            srt_content += f"{start_srt} --> {end_srt}\n"
-            srt_content += f"{text}\n\n"
-
-        # 6. SRTファイルの保存
-        if format == 'SRT':
-            filename, _ = QFileDialog.getSaveFileName(self, "SRTファイルを保存", "export.srt", "SRT Files (*.srt)")
-            if filename:
-                try:
-                    with open(filename, 'w', encoding='utf-8') as f:
-                        f.write(srt_content)
-                    self.status_bar.showMessage(f"SRTファイルを保存しました: {filename}", 5000)
-                except Exception as e:
-                    QMessageBox.critical(self, "SRT保存エラー", f"ファイルの保存中にエラーが発生しました: {e}")
+                    # Try to get error message from API response if possible
+                    error_data = response.json()
+                    if 'error' in error_data: error_detail = f"\nサーバーエラー: {error_data['error']}"
+                except:
+                    pass
+                QMessageBox.critical(self, f"{format.upper()} APIエラー", f"APIリクエストエラー: {e}{error_detail}")
+                self.status_bar.showMessage(f"{format.upper()}エクスポートエラー", 5000)
+            except Exception as e:
+                QMessageBox.critical(self, f"{format.upper()}保存エラー", f"ファイルの保存中にエラーが発生しました: {e}")
+                self.status_bar.showMessage(f"{format.upper()}エクスポートエラー", 5000)
 
     def _delete_selected(self):
         selected_data = self._get_selected_rows_data()
@@ -758,6 +1160,14 @@ class VideoPreviewApp(QMainWindow):
             finally:
                 # Consider adding progress indicator
                  pass
+
+    def _open_db_editor(self):
+        """データベース編集ウィンドウを開く"""
+        if not self.db_editor:
+            self.db_editor = DatabaseEditorWindow(self)
+        self.db_editor.show()
+        self.db_editor.raise_()
+        self.db_editor.activateWindow()
 
     def closeEvent(self, event):
         # Clean up resources if needed (e.g., stop threads)

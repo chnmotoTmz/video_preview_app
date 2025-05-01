@@ -750,6 +750,639 @@ def delete_scenes():
         if conn:
             conn.close()
 
+# --- テーブルレコード編集用APIエンドポイント ---
+@app.route('/api/videos/<int:video_id>', methods=['PUT'])
+def update_video(video_id):
+    """特定の動画レコードを更新する"""
+    data = request.json
+    if not data:
+        return jsonify({"error": "データが指定されていません"}), 400
+    
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # 更新可能なフィールドと型のマッピング
+        allowed_fields = {
+            'filename': str,
+            'filepath': str,
+            'duration_seconds': float,
+            'timecode_offset': str,
+            'description': str
+        }
+        
+        # SQLクエリの組み立て
+        update_fields = []
+        update_values = []
+        
+        for field, value in data.items():
+            if field in allowed_fields:
+                # 値の型チェックと変換（None値は許可）
+                if value is not None and not isinstance(value, allowed_fields[field]):
+                    try:
+                        if allowed_fields[field] == float:
+                            value = float(value)
+                        elif allowed_fields[field] == int:
+                            value = int(value)
+                        elif allowed_fields[field] == str:
+                            value = str(value)
+                    except (ValueError, TypeError):
+                        return jsonify({"error": f"フィールド '{field}' の値 '{value}' は {allowed_fields[field].__name__} 型として無効です"}), 400
+                
+                # フィールドと値を追加
+                update_fields.append(f"{field} = ?")
+                update_values.append(value)
+        
+        if not update_fields:
+            return jsonify({"error": "更新可能なフィールドが指定されていません"}), 400
+        
+        # 更新クエリの実行
+        query = f"UPDATE videos SET {', '.join(update_fields)} WHERE id = ?"
+        update_values.append(video_id)
+        
+        cursor.execute(query, update_values)
+        conn.commit()
+        
+        if cursor.rowcount == 0:
+            return jsonify({"error": f"ID {video_id} の動画レコードが見つかりません"}), 404
+        
+        # 更新後のデータを返す
+        video = conn.execute('SELECT * FROM videos WHERE id = ?', (video_id,)).fetchone()
+        return jsonify({"success": True, "data": dict(video)})
+        
+    except sqlite3.Error as e:
+        logger.error(f"Database error during video update: {e}")
+        return jsonify({"error": f"データベースエラー: {str(e)}"}), 500
+    except Exception as e:
+        logger.error(f"Error during video update: {e}", exc_info=True)
+        return jsonify({"error": f"レコード更新中にエラーが発生しました: {str(e)}"}), 500
+    finally:
+        if conn:
+            conn.close()
+
+@app.route('/api/scenes/<int:scene_id>', methods=['PUT'])
+def update_scene(scene_id):
+    """特定のシーンレコードを更新する"""
+    data = request.json
+    if not data:
+        return jsonify({"error": "データが指定されていません"}), 400
+    
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # 更新可能なフィールドと型のマッピング
+        allowed_fields = {
+            'video_id': int,
+            'scene_id': int,
+            'start_timecode': str,
+            'end_timecode': str,
+            'description': str,
+            'evaluation_tag': str,
+            'scene_good_reason': str,
+            'scene_bad_reason': str,
+            'thumbnail_path': str
+        }
+        
+        # SQLクエリの組み立て
+        update_fields = []
+        update_values = []
+        
+        for field, value in data.items():
+            if field in allowed_fields:
+                # 値の型チェックと変換（None値は許可）
+                if value is not None and not isinstance(value, allowed_fields[field]):
+                    try:
+                        if allowed_fields[field] == float:
+                            value = float(value)
+                        elif allowed_fields[field] == int:
+                            value = int(value)
+                        elif allowed_fields[field] == str:
+                            value = str(value)
+                    except (ValueError, TypeError):
+                        return jsonify({"error": f"フィールド '{field}' の値 '{value}' は {allowed_fields[field].__name__} 型として無効です"}), 400
+                
+                # フィールドと値を追加
+                update_fields.append(f"{field} = ?")
+                update_values.append(value)
+        
+        if not update_fields:
+            return jsonify({"error": "更新可能なフィールドが指定されていません"}), 400
+        
+        # 更新クエリの実行
+        query = f"UPDATE scenes SET {', '.join(update_fields)} WHERE id = ?"
+        update_values.append(scene_id)
+        
+        cursor.execute(query, update_values)
+        conn.commit()
+        
+        if cursor.rowcount == 0:
+            return jsonify({"error": f"ID {scene_id} のシーンレコードが見つかりません"}), 404
+        
+        # 更新後のデータを返す
+        scene = conn.execute('SELECT * FROM scenes WHERE id = ?', (scene_id,)).fetchone()
+        return jsonify({"success": True, "data": dict(scene)})
+        
+    except sqlite3.Error as e:
+        logger.error(f"Database error during scene update: {e}")
+        return jsonify({"error": f"データベースエラー: {str(e)}"}), 500
+    except Exception as e:
+        logger.error(f"Error during scene update: {e}", exc_info=True)
+        return jsonify({"error": f"レコード更新中にエラーが発生しました: {str(e)}"}), 500
+    finally:
+        if conn:
+            conn.close()
+
+@app.route('/api/transcriptions/<int:transcription_id>', methods=['PUT'])
+def update_transcription(transcription_id):
+    """特定の字幕レコードを更新する"""
+    data = request.json
+    if not data:
+        return jsonify({"error": "データが指定されていません"}), 400
+    
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # 更新可能なフィールドと型のマッピング
+        allowed_fields = {
+            'video_id': int,
+            'scene_id': int,
+            'start_timecode': str,
+            'end_timecode': str,
+            'transcription': str,
+            'transcription_good_reason': str,
+            'transcription_bad_reason': str
+        }
+        
+        # SQLクエリの組み立て
+        update_fields = []
+        update_values = []
+        
+        for field, value in data.items():
+            if field in allowed_fields:
+                # 値の型チェックと変換（None値は許可）
+                if value is not None and not isinstance(value, allowed_fields[field]):
+                    try:
+                        if allowed_fields[field] == float:
+                            value = float(value)
+                        elif allowed_fields[field] == int:
+                            value = int(value)
+                        elif allowed_fields[field] == str:
+                            value = str(value)
+                    except (ValueError, TypeError):
+                        return jsonify({"error": f"フィールド '{field}' の値 '{value}' は {allowed_fields[field].__name__} 型として無効です"}), 400
+                
+                # フィールドと値を追加
+                update_fields.append(f"{field} = ?")
+                update_values.append(value)
+        
+        if not update_fields:
+            return jsonify({"error": "更新可能なフィールドが指定されていません"}), 400
+        
+        # 更新クエリの実行
+        query = f"UPDATE transcriptions SET {', '.join(update_fields)} WHERE id = ?"
+        update_values.append(transcription_id)
+        
+        cursor.execute(query, update_values)
+        conn.commit()
+        
+        if cursor.rowcount == 0:
+            return jsonify({"error": f"ID {transcription_id} の字幕レコードが見つかりません"}), 404
+        
+        # 更新後のデータを返す
+        transcription = conn.execute('SELECT * FROM transcriptions WHERE id = ?', (transcription_id,)).fetchone()
+        return jsonify({"success": True, "data": dict(transcription)})
+        
+    except sqlite3.Error as e:
+        logger.error(f"Database error during transcription update: {e}")
+        return jsonify({"error": f"データベースエラー: {str(e)}"}), 500
+    except Exception as e:
+        logger.error(f"Error during transcription update: {e}", exc_info=True)
+        return jsonify({"error": f"レコード更新中にエラーが発生しました: {str(e)}"}), 500
+    finally:
+        if conn:
+            conn.close()
+
+# メソッドを追加して、特定レコードを取得するAPIを実装
+@app.route('/api/video_fields', methods=['GET'])
+def get_video_fields():
+    """videos テーブルの編集可能なフィールド情報を取得"""
+    fields = {
+        'filename': {'type': 'string', 'description': '動画ファイル名'},
+        'filepath': {'type': 'string', 'description': '動画ファイルのパス'},
+        'duration_seconds': {'type': 'number', 'description': '動画の長さ（秒）'},
+        'timecode_offset': {'type': 'string', 'description': 'タイムコードのオフセット（HH:MM:SS:FF形式）'},
+        'description': {'type': 'string', 'description': '動画の説明'}
+    }
+    return jsonify(fields)
+
+@app.route('/api/scene_fields', methods=['GET'])
+def get_scene_fields():
+    """scenes テーブルの編集可能なフィールド情報を取得"""
+    fields = {
+        'video_id': {'type': 'integer', 'description': '関連する動画ID'},
+        'scene_id': {'type': 'integer', 'description': 'シーン番号'},
+        'start_timecode': {'type': 'string', 'description': '開始タイムコード（HH:MM:SS:FF形式）'},
+        'end_timecode': {'type': 'string', 'description': '終了タイムコード（HH:MM:SS:FF形式）'},
+        'description': {'type': 'string', 'description': 'シーンの説明'},
+        'evaluation_tag': {'type': 'string', 'description': '評価タグ（good/bad/neutral等）'},
+        'scene_good_reason': {'type': 'string', 'description': '良い評価の理由'},
+        'scene_bad_reason': {'type': 'string', 'description': '悪い評価の理由'},
+        'thumbnail_path': {'type': 'string', 'description': 'サムネイル画像のパス'}
+    }
+    return jsonify(fields)
+
+@app.route('/api/transcription_fields', methods=['GET'])
+def get_transcription_fields():
+    """transcriptions テーブルの編集可能なフィールド情報を取得"""
+    fields = {
+        'video_id': {'type': 'integer', 'description': '関連する動画ID'},
+        'scene_id': {'type': 'integer', 'description': '関連するシーンID'},
+        'start_timecode': {'type': 'string', 'description': '開始タイムコード（HH:MM:SS:FF形式）'},
+        'end_timecode': {'type': 'string', 'description': '終了タイムコード（HH:MM:SS:FF形式）'},
+        'transcription': {'type': 'string', 'description': '字幕のテキスト'},
+        'transcription_good_reason': {'type': 'string', 'description': '良い評価の理由'},
+        'transcription_bad_reason': {'type': 'string', 'description': '悪い評価の理由'}
+    }
+    return jsonify(fields)
+
+@app.route('/api/mcp/tables', methods=['GET'])
+def get_table_names():
+    """データベース内の編集可能なテーブル一覧を取得"""
+    tables = [
+        {'name': 'videos', 'description': '動画情報テーブル'},
+        {'name': 'scenes', 'description': 'シーン情報テーブル'},
+        {'name': 'transcriptions', 'description': '字幕情報テーブル'}
+    ]
+    return jsonify(tables)
+
+@app.route('/api/mcp/records/<string:table_name>', methods=['GET'])
+def get_table_records(table_name):
+    """指定したテーブルのレコード一覧を取得"""
+    # セキュリティ対策：テーブル名のバリデーション
+    allowed_tables = ['videos', 'scenes', 'transcriptions']
+    if table_name not in allowed_tables:
+        return jsonify({"error": f"テーブル '{table_name}' は存在しないか、アクセスできません"}), 404
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # 基本的なレコード取得クエリ
+        query = f"SELECT * FROM {table_name}"
+        
+        # オプションのクエリパラメータ
+        limit = request.args.get('limit', default=100, type=int)
+        offset = request.args.get('offset', default=0, type=int)
+        
+        # ソート順（オプション）
+        sort_by = request.args.get('sort_by')
+        sort_order = request.args.get('sort_order', default='ASC').upper()
+        
+        # セキュリティ対策：並べ替え順のバリデーション
+        if sort_order not in ['ASC', 'DESC']:
+            sort_order = 'ASC'
+        
+        # フィルタリング（オプション）
+        filters = []
+        filter_values = []
+        
+        for key, value in request.args.items():
+            # クエリパラメータのうち、特殊なもの以外をフィルタとして使用
+            if key not in ['limit', 'offset', 'sort_by', 'sort_order'] and key.startswith('filter_'):
+                field = key[7:]  # 'filter_' プレフィックスを削除
+                filters.append(f"{field} LIKE ?")
+                filter_values.append(f"%{value}%")
+        
+        # フィルタの適用
+        if filters:
+            query += " WHERE " + " AND ".join(filters)
+        
+        # ソートの適用
+        if sort_by:
+            query += f" ORDER BY {sort_by} {sort_order}"
+        
+        # ページネーションの適用
+        query += f" LIMIT {limit} OFFSET {offset}"
+        
+        # クエリ実行
+        cursor.execute(query, filter_values)
+        records = cursor.fetchall()
+        
+        # レコード総数の取得（ページネーション情報用）
+        count_query = f"SELECT COUNT(*) FROM {table_name}"
+        if filters:
+            count_query += " WHERE " + " AND ".join(filters)
+        cursor.execute(count_query, filter_values)
+        total_count = cursor.fetchone()[0]
+        
+        # レスポンスの構築
+        return jsonify({
+            "records": [dict(record) for record in records],
+            "pagination": {
+                "total": total_count,
+                "limit": limit,
+                "offset": offset,
+                "has_more": (offset + limit) < total_count
+            }
+        })
+        
+    except sqlite3.Error as e:
+        logger.error(f"Database error during get_table_records: {e}")
+        return jsonify({"error": f"データベースエラー: {str(e)}"}), 500
+    except Exception as e:
+        logger.error(f"Error during get_table_records: {e}", exc_info=True)
+        return jsonify({"error": f"レコード取得中にエラーが発生しました: {str(e)}"}), 500
+    finally:
+        if conn:
+            conn.close()
+
+@app.route('/api/export/combined', methods=['POST'])
+def export_combined():
+    """選択されたシーンから統合されたEDLまたはSRTファイルを生成するAPI"""
+    data = request.json
+    if not data or 'scene_pks' not in data or 'format' not in data:
+        return jsonify({"error": "scene_pksとformatが指定されていません"}), 400
+
+    scene_pks = data['scene_pks']
+    export_format = data['format'].upper()
+
+    if not isinstance(scene_pks, list) or not scene_pks:
+        return jsonify({"error": "scene_pksはリストである必要があります"}), 400
+
+    if export_format not in ['EDL', 'SRT']:
+        return jsonify({"error": "formatはEDLまたはSRTである必要があります"}), 400
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # シーンの順番を維持するためのCASE WHEN句
+        case_statements = []
+        for i, pk in enumerate(scene_pks):
+            case_statements.append(f"WHEN s.id = {pk} THEN {i}")
+        
+        order_case = f"CASE {' '.join(case_statements)} ELSE 999999 END"
+        placeholders = ','.join(['?' for _ in scene_pks])
+
+        # シーン情報を取得（送信された順序を維持）
+        query = f"""
+            SELECT 
+                s.id as scene_pk, s.video_id, s.scene_id, 
+                s.start_timecode, s.end_timecode,
+                v.filename as video_filename,
+                v.timecode_offset,
+                v.duration_seconds
+            FROM scenes s
+            JOIN videos v ON s.video_id = v.id
+            WHERE s.id IN ({placeholders})
+            ORDER BY {order_case}
+        """
+        
+        logger.info(f"Generated SQL: {query}")
+        logger.info(f"With parameters: {scene_pks}")
+        
+        cursor.execute(query, scene_pks)
+        scenes = cursor.fetchall()
+        
+        if not scenes:
+            return jsonify({"error": "指定されたシーンが見つかりません"}), 404
+
+        # SRT生成用に字幕データも取得
+        transcriptions = []
+        if export_format == 'SRT':
+            # 関連する字幕データの取得
+            scene_pks_str = ','.join([str(scene['scene_pk']) for scene in scenes])
+            trans_query = f"""
+                SELECT 
+                    t.id as trans_id, t.scene_id, t.start_timecode, t.end_timecode, 
+                    t.transcription, s.video_id
+                FROM transcriptions t
+                JOIN scenes s ON t.scene_id = s.id
+                WHERE t.scene_id IN ({scene_pks_str}) AND t.transcription IS NOT NULL AND t.transcription != ''
+                ORDER BY t.scene_id, t.start_timecode
+            """
+            cursor.execute(trans_query)
+            transcriptions = cursor.fetchall()
+
+        # レコードタイムコードの計算用変数
+        scene_record_times = {}  # シーンIDをキーとするレコードタイムコード情報
+        edl_frame_rate = 60.0
+        source_frame_rate = 60.0
+        record_start_seconds = 0.0
+        epsilon = 1e-9  # 浮動小数点比較用の微小値
+        edl_content = "TITLE: Video Preprocessing Export\n"
+        edl_content += "FCM: NON-DROP FRAME\n\n"
+
+        # 各シーンに対してEDL行を生成
+        for i, scene in enumerate(scenes):
+            event_num = f"{i + 1:03d}"
+            reel_name = os.path.splitext(scene['video_filename'])[0][:8].upper()
+            track_type = "V"
+            edit_type = "C"
+            scene_pk = scene['scene_pk']
+
+            # タイムコードオフセットを秒に変換
+            offset_sec = timecode_to_seconds(scene['timecode_offset'], source_frame_rate) if scene['timecode_offset'] else 0.0
+            
+            # シーン開始・終了タイムコードを秒に変換
+            source_start_sec = timecode_to_seconds(scene['start_timecode'], source_frame_rate)
+            source_end_sec = timecode_to_seconds(scene['end_timecode'], source_frame_rate)
+
+            # ソースタイムコードにオフセットを適用
+            adjusted_start_sec = source_start_sec + offset_sec
+            adjusted_end_sec = source_end_sec + offset_sec
+
+            # クリップの終了点を制限
+            clip_end_sec = None
+            if scene['duration_seconds'] is not None:
+                # 動画の終了時間（最後のフレームの終わり = 次のフレームの始まり）
+                duration_sec = float(scene['duration_seconds'])
+                clip_end_sec = offset_sec + duration_sec
+
+            # adjusted_end_sec が clip_end_sec を超えないようにする
+            # 浮動小数点誤差を考慮して比較し、超えている場合は厳密にクリップ
+            if clip_end_sec is not None and adjusted_end_sec > clip_end_sec + epsilon:
+                logger.warning(f"[EDL Clip] Scene PK {scene_pk}: adjusted_end_sec ({adjusted_end_sec}) exceeded clip_end_sec ({clip_end_sec}). Clipping.")
+                adjusted_end_sec = clip_end_sec
+
+            # 継続時間を計算し、最小デュレーションを保証
+            source_duration_sec = max(0.0, adjusted_end_sec - adjusted_start_sec)
+            min_duration = 1.0 / edl_frame_rate  # EDLのフレームレート基準
+            if source_duration_sec < min_duration - epsilon:
+                adjusted_end_sec = adjusted_start_sec + min_duration
+                # 再度クリップが必要か確認
+                if clip_end_sec is not None:
+                    adjusted_end_sec = min(adjusted_end_sec, clip_end_sec)
+                source_duration_sec = max(0.0, adjusted_end_sec - adjusted_start_sec)  # 再計算
+
+            # EDL用タイムコードに変換
+            source_in_tc = seconds_to_edl_timecode(adjusted_start_sec, edl_frame_rate)
+            
+            # OUT点計算: adjusted_end_sec が clip_end_sec とほぼ同じ場合、丸め誤差でフレームが増えるのを防ぐ
+            out_sec_for_tc = adjusted_end_sec
+            if clip_end_sec is not None and abs(adjusted_end_sec - clip_end_sec) < epsilon:
+                # ほぼクリップの終了点の場合、わずかに小さい値を渡して round() の影響を避ける
+                out_sec_for_tc = adjusted_end_sec - epsilon
+                logger.debug(f"[EDL TC Adjust] Scene PK {scene_pk}: Adjusted out_sec_for_tc to {out_sec_for_tc} due to proximity to clip_end_sec.")
+            elif adjusted_end_sec < epsilon:  # 0秒クリップの場合
+                out_sec_for_tc = 0.0  # 念のため0にする
+
+            source_out_tc = seconds_to_edl_timecode(out_sec_for_tc, edl_frame_rate)
+
+            # レコードタイムコードを計算
+            record_in_sec = record_start_seconds
+            record_out_sec = record_start_seconds + source_duration_sec
+            record_in_tc = seconds_to_edl_timecode(record_in_sec, edl_frame_rate)
+            record_out_tc = seconds_to_edl_timecode(record_out_sec, edl_frame_rate)
+
+            # シーンのレコード時間情報を保存（SRT生成用）
+            scene_record_times[scene_pk] = {
+                'record_in': record_in_sec,
+                'record_out': record_out_sec,
+                'source_start': source_start_sec  # オフセット適用前の開始秒数
+            }
+
+            # --- デバッグログ追加 ---
+            logger.info(f"[EDL Export] Scene PK: {scene_pk}, Video: {scene['video_filename']}")
+            logger.info(f"  Offset TC: {scene['timecode_offset']}, Offset Sec: {offset_sec:.5f}")
+            logger.info(f"  Scene Start TC: {scene['start_timecode']}, Scene End TC: {scene['end_timecode']}")
+            logger.info(f"  Source Start Sec (orig): {source_start_sec:.5f}, Source End Sec (orig): {source_end_sec:.5f}")
+            logger.info(f"  Duration Sec (DB): {duration_sec if 'duration_sec' in locals() else None}")
+            logger.info(f"  Clip End Sec (calc): {clip_end_sec}")
+            logger.info(f"  Adjusted Start Sec (final): {adjusted_start_sec:.5f}")
+            logger.info(f"  Adjusted End Sec (final): {adjusted_end_sec:.5f}")
+            logger.info(f"  Out Sec for TC Conv: {out_sec_for_tc:.5f}")
+            logger.info(f"  Source Duration Sec (final): {source_duration_sec:.5f}")
+            logger.info(f"  Source IN TC (EDL): {source_in_tc}, Source OUT TC (EDL): {source_out_tc}")
+            logger.info(f"  Record IN TC (EDL): {record_in_tc}, Record OUT TC (EDL): {record_out_tc}")
+
+            # EDL行を生成
+            edl_content += f"{event_num}  {reel_name:<8} {track_type}     {edit_type}        {source_in_tc} {source_out_tc} {record_in_tc} {record_out_tc}\n"
+            edl_content += f"* FROM CLIP NAME: {scene['video_filename']}\n\n"
+
+            record_start_seconds = record_out_sec  # 次のレコード開始位置を更新
+
+        # EDLファイルを返す
+        if export_format == 'EDL':
+            edl_bytes = edl_content.encode('utf-8')
+            return send_file(
+                io.BytesIO(edl_bytes),
+                mimetype='application/octet-stream',
+                as_attachment=True,
+                download_name='export.edl'
+            )
+
+        # SRTファイルを生成
+        if export_format == 'SRT':
+            srt_content = ""
+            # シーンIDでグループ化された字幕を取得
+            transcriptions_by_scene = {}
+            for trans in transcriptions:
+                scene_id = trans['scene_id']
+                if scene_id not in transcriptions_by_scene:
+                    transcriptions_by_scene[scene_id] = []
+                transcriptions_by_scene[scene_id].append(trans)
+
+            # EDLのイベント順序（scene_pks）に合わせてSRTエントリを生成
+            srt_idx = 1
+            for scene_pk, time_info in scene_record_times.items():
+                if scene_pk in transcriptions_by_scene:
+                    scene_trans = transcriptions_by_scene[scene_pk]
+                    
+                    for trans in scene_trans:
+                        # 字幕の元のタイムコードを秒数に変換
+                        trans_start_sec = timecode_to_seconds(trans['start_timecode'], source_frame_rate)
+                        trans_end_sec = timecode_to_seconds(trans['end_timecode'], source_frame_rate)
+                        
+                        # --- SRT デバッグログ ---
+                        logger.debug(f"[SRT Calc] Scene PK: {scene_pk}, Trans ID: {trans['trans_id']}")
+                        logger.debug(f"  Trans TC: {trans['start_timecode']} -> {trans['end_timecode']}")
+                        logger.debug(f"  Trans Sec (orig): {trans_start_sec:.5f} -> {trans_end_sec:.5f}")
+                        logger.debug(f"  Scene Source Start Sec: {time_info['source_start']:.5f}")
+                        logger.debug(f"  Scene Record IN/OUT: {time_info['record_in']:.5f} -> {time_info['record_out']:.5f}")
+                        
+                        # シーンのソース時間内での相対位置を計算
+                        scene_trans_start_rel = trans_start_sec - time_info['source_start']
+                        scene_trans_end_rel = trans_end_sec - time_info['source_start']
+                        
+                        # シーンのレコード時間に配置
+                        record_trans_start = time_info['record_in'] + scene_trans_start_rel
+                        record_trans_end = time_info['record_in'] + scene_trans_end_rel
+                        
+                        logger.debug(f"  Record Trans Sec (raw): {record_trans_start:.5f} -> {record_trans_end:.5f}")
+
+                        # シーンのレコード範囲内に収まるようにクリップ
+                        # epsilon を使って比較
+                        record_trans_start = max(time_info['record_in'] - epsilon, record_trans_start)
+                        record_trans_end = min(time_info['record_out'] + epsilon, record_trans_end)
+                        # 再度、シーンの範囲内に厳密に収める
+                        record_trans_start = max(time_info['record_in'], record_trans_start)
+                        record_trans_end = min(time_info['record_out'], record_trans_end)
+                        
+                        # 開始時間と終了時間が逆転しないように、また最小デュレーション（1フレーム）を保証
+                        min_srt_duration = 1.0 / edl_frame_rate  # EDLと同じフレームレート基準
+                        if record_trans_end < record_trans_start + min_srt_duration - epsilon:
+                            record_trans_end = record_trans_start + min_srt_duration
+                            # シーンの終了時間を超えないように再調整
+                            if record_trans_end > time_info['record_out']:
+                                # シーン終了に近すぎる場合、開始時間を調整
+                                if time_info['record_out'] - time_info['record_in'] > min_srt_duration:
+                                    record_trans_start = time_info['record_out'] - min_srt_duration
+                                    record_trans_end = time_info['record_out']
+                                else:
+                                    # シーン自体が短すぎる場合は中央に配置
+                                    middle = (time_info['record_in'] + time_info['record_out']) / 2
+                                    half_duration = min_srt_duration / 2
+                                    record_trans_start = middle - half_duration
+                                    record_trans_end = middle + half_duration
+                                    # それでもシーン範囲内に確実に収める
+                                    record_trans_start = max(time_info['record_in'], record_trans_start)
+                                    record_trans_end = min(time_info['record_out'], record_trans_end)
+                        
+                        # SRT形式のタイムコードに変換
+                        logger.debug(f"  Record Trans Sec (clipped): {record_trans_start:.5f} -> {record_trans_end:.5f}")
+
+                        start_srt = seconds_to_srt_timecode(record_trans_start)
+                        end_srt = seconds_to_srt_timecode(record_trans_end)
+                        
+                        # SRTエントリを追加
+                        text = trans['transcription'] if trans['transcription'] else ""
+                        srt_content += f"{srt_idx}\n"
+                        srt_content += f"{start_srt} --> {end_srt}\n"
+                        logger.debug(f"  SRT Output TC: {start_srt} --> {end_srt}")
+                        srt_content += f"{text}\n\n"
+                        
+                        srt_idx += 1
+
+            # SRTファイルを返す
+            srt_bytes = srt_content.encode('utf-8')
+            return send_file(
+                io.BytesIO(srt_bytes),
+                mimetype='application/x-subrip',
+                as_attachment=True,
+                download_name='export.srt'
+            )
+
+    except sqlite3.Error as e:
+        logger.error(f"Database error during combined export: {e}")
+        return jsonify({"error": f"データベースエラー: {str(e)}"}), 500
+    except ValueError as e:
+        logger.error(f"Value error during combined export: {e}")
+        return jsonify({"error": f"値エラー: {str(e)}"}), 400
+    except Exception as e:
+        logger.error(f"Error during combined export: {e}", exc_info=True)
+        return jsonify({"error": f"エクスポート中にエラーが発生しました: {str(e)}"}), 500
+    finally:
+        if conn:
+            conn.close()
+
 # --- メイン実行部分 ---
 def main():
     """メイン実行関数"""
